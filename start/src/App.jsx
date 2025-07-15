@@ -1,8 +1,22 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import AdminLayout from "./layouts/AdminLayout";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import MainLayout from "./layouts/MainLayout";
+import HomePage from "./pages/HomePage";
 
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <MainLayout />,
+    children: [
+      {
+        index: true,
+        element: <HomePage />,
+      },
+    ],
+  },
   {
     path: "/",
     element: <div>Hello World</div>,
@@ -12,12 +26,12 @@ const router = createBrowserRouter([
     element: <AdminLayout />,
     children: [
       {
-        path: "login",
-        element: <div>Login</div>,
+        path: "login", // Hindari memberikan / pada children yang berada di page yang sama
+        element: <LoginPage />,
       },
       {
-        path: "register",
-        element: <div>Register</div>,
+        path: "register", // Hindari memberikan / pada children
+        element: <RegisterPage />,
       },
     ],
   },
