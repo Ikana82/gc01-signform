@@ -19,7 +19,9 @@ export default function LoginPage() {
       );
       console.log(userLoggedIn);
       navigate("/");
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (

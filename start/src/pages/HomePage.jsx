@@ -6,7 +6,7 @@ export default function HomePage() {
   const navigate = useNavigate();
   async function handleLogout() {
     try {
-      const result = await signOut(auth);
+      await signOut(auth);
       console.log(result);
       navigate("/auth/login");
     } catch (error) {
