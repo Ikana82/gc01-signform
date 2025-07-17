@@ -21,7 +21,7 @@ export default function AdminLayout() {
   }
   return (
     <>
-      <header>Admin Side</header>
+      {/* <header>Admin Side</header> */}
       <Outlet />
     </>
   );
