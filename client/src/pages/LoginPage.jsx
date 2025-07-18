@@ -3,6 +3,7 @@ import { auth } from "../configs/firebase";
 import { useNavigate } from "react-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { IoEye, IoEyeOff } from "react-icons/io5";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -12,6 +13,12 @@ export default function LoginPage() {
 
   async function handleLogin(e) {
     e.preventDefault();
+
+    if (!email || !password) {
+      toast.error("All fields are required");
+      return;
+    }
+
     console.log(email, password);
     try {
       const userLoggedIn = await signInWithEmailAndPassword(
@@ -23,12 +30,13 @@ export default function LoginPage() {
       navigate("/");
     } catch (error) {
       console.log(error);
-      alert("Failed to login: " + error.massage);
+      toast.error("Whoops! That combo doesn’t work. Try again.");
     }
   }
 
   return (
     <div className="w-full bg-white flex flex-col md:flex-row overflow-hidden">
+      <Toaster position="top-right" reverseOrder={false} />
       {/* Left Side (Image atau Banner) */}
       <div className="w-full md:w-1/2 flex justify-center items-center">
         <img
@@ -47,7 +55,7 @@ export default function LoginPage() {
           </div>
           <p className="text-base md:text-lg text-slate-700 leading-normal tracking-tight">
             Today is a new day. It's your day. You shape it. <br />
-            Sign in to start managing your projects.
+            Sign in and start expressing your style.
           </p>
         </div>
 
@@ -72,7 +80,7 @@ export default function LoginPage() {
               <input
                 type={showpassword ? "text" : "password"}
                 value={password}
-                placeholder="password"
+                placeholder="Type password here"
                 onChange={(e) => setPassword(e.target.value)}
                 className="flex-1 w-full h-10 px-3 bg-slate-100 outline-none rounded-lg outline-gray-300 text-sm placeholder-gray-400 placeholder:text-sm placeholder:italic pr-10"
               />

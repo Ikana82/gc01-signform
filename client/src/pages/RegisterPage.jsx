@@ -3,32 +3,51 @@ import { auth } from "../configs/firebase";
 import { useNavigate } from "react-router";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { IoEye, IoEyeOff } from "react-icons/io5";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const [showpassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [confirmpassword, setConfirmPassword] = useState("");
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   async function handleRegister(e) {
     e.preventDefault();
-    console.log(email, password);
+
+    if (!email || !password || !confirmpassword) {
+      toast.error("All fields are required");
+      return;
+    }
+
+    if (password !== confirmpassword) {
+      toast.error("Oops! Those passwords don’t match. Try again");
+      return;
+    }
     try {
       const userLoggedIn = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
-      console.log(userRegister);
-      navigate("/");
+      console.log(userLoggedIn);
+      toast.success("Account created successfully!");
+      setTimeout(() => navigate("/auth/login"), 2000);
+      // navigate("/");
     } catch (error) {
       console.log(error);
-      alert("Failed to login: " + error.massage);
+      if (error.code === "auth/email-already-in-use") {
+        toast.error("Email is already registered");
+      } else {
+        toast.error("Failed to register: " + error.message);
+      }
     }
   }
 
   return (
     <div className="w-full bg-white flex flex-col md:flex-row overflow-hidden">
+      <Toaster position="top-right" reverseOrder={false} />
       {/* Left Side (Image atau Banner) */}
       <div className="w-full md:w-1/2 flex justify-center items-center">
         <img
@@ -47,7 +66,7 @@ export default function RegisterPage() {
           </div>
           <p className="text-base md:text-lg text-slate-700 leading-normal tracking-tight">
             Today is a new day. It's your day. You shape it. <br />
-            Sign in to start managing your projects.
+            Sign up and start expressing your style.
           </p>
         </div>
 
@@ -66,13 +85,14 @@ export default function RegisterPage() {
               className="w-full h-10 px-3 bg-slate-100 rounded-lg outline-gray-300 text-sm placeholder-gray-400 placeholder:text-sm placeholder:italic"
             />
           </div>
+
           <div className="flex flex-col gap-2">
             <label className="text-sm text-gray-900">Password</label>
             <div className="flex items-center w-full h-10 bg-slate-100 rounded-lg">
               <input
-                type={showpassword ? "text" : "password"}
+                type={showPassword ? "text" : "password"}
                 value={password}
-                placeholder="password"
+                placeholder="Type password here"
                 onChange={(e) => setPassword(e.target.value)}
                 className="flex-1 w-full h-10 px-3 bg-slate-100 outline-none rounded-lg outline-gray-300 text-sm placeholder-gray-400 placeholder:text-sm placeholder:italic pr-10"
               />
@@ -82,9 +102,36 @@ export default function RegisterPage() {
                     ? "opacity-100 text-gray-700"
                     : "opacity-50 text-gray-400"
                 }`}
-                onClick={() => setShowPassword(!showpassword)}
+                onClick={() => setShowPassword(!showPassword)}
               >
-                {showpassword ? <IoEye size={20} /> : <IoEyeOff size={20} />}
+                {showPassword ? <IoEye size={20} /> : <IoEyeOff size={20} />}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-sm text-gray-900">Confirm Password</label>
+            <div className="flex items-center w-full h-10 bg-slate-100 rounded-lg">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                value={confirmpassword}
+                placeholder="Confirm your password here"
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="flex-1 w-full h-10 px-3 bg-slate-100 outline-none rounded-lg outline-gray-300 text-sm placeholder-gray-400 placeholder:text-sm placeholder:italic pr-10"
+              />
+              <div
+                className={`cursor-pointer transition-opacity duration-300 pr-3 ${
+                  confirmpassword.length > 0
+                    ? "opacity-100 text-gray-700"
+                    : "opacity-50 text-gray-400"
+                }`}
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? (
+                  <IoEye size={20} />
+                ) : (
+                  <IoEyeOff size={20} />
+                )}
               </div>
             </div>
           </div>
@@ -92,13 +139,13 @@ export default function RegisterPage() {
             type="submit"
             className="w-full bg-slate-800 text-white text-base py-3 rounded-xl cursor-pointer"
           >
-            Sign In
+            Sign Up
           </button>
         </form>
 
         <div className="w-full flex items-center gap-4">
           <hr className="flex-1 border-slate-300" />
-          <span className="text-sm text-slate-700">Or sign in with</span>
+          <span className="text-sm text-slate-700">Or sign up with</span>
           <hr className="flex-1 border-slate-300" />
         </div>
 
@@ -116,7 +163,7 @@ export default function RegisterPage() {
         </div>
 
         <div className="text-center text-sm md:text-base text-slate-700">
-          Don’t you have an account?{" "}
+          Already have an account?{" "}
           <span
             className="text-blue-700 cursor-pointer"
             onClick={() => navigate("/auth/login")}
