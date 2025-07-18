@@ -2,11 +2,13 @@ import { useState } from "react";
 import { auth } from "../configs/firebase";
 import { useNavigate } from "react-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { IoEye, IoEyeOff } from "react-icons/io5";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [showpassword, setShowPassword] = useState(false);
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -32,7 +34,7 @@ export default function LoginPage() {
         <img
           src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           alt="Fashion"
-          className="w-full h-44 md:h-[550px] md:w-[600px] object-cover rounded-[20px]"
+          className="w-full h-full object-cover rounded-[20px]"
         />
       </div>
 
@@ -66,13 +68,25 @@ export default function LoginPage() {
           </div>
           <div className="flex flex-col gap-2">
             <label className="text-sm text-gray-900">Password</label>
-            <input
-              type="password"
-              value={password}
-              placeholder="password"
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full h-10 px-3 bg-slate-100 rounded-lg outline-gray-300 text-sm placeholder-gray-400 placeholder:text-sm placeholder:italic"
-            />
+            <div className="flex items-center w-full h-10 bg-slate-100 rounded-lg">
+              <input
+                type={showpassword ? "text" : "password"}
+                value={password}
+                placeholder="password"
+                onChange={(e) => setPassword(e.target.value)}
+                className="flex-1 w-full h-10 px-3 bg-slate-100 outline-none rounded-lg outline-gray-300 text-sm placeholder-gray-400 placeholder:text-sm placeholder:italic pr-10"
+              />
+              <div
+                className={`cursor-pointer transition-opacity duration-300 pr-3 ${
+                  password.length > 0
+                    ? "opacity-100 text-gray-700"
+                    : "opacity-50 text-gray-400"
+                }`}
+                onClick={() => setShowPassword(!showpassword)}
+              >
+                {showpassword ? <IoEye size={20} /> : <IoEyeOff size={20} />}
+              </div>
+            </div>
           </div>
           <button
             type="submit"
