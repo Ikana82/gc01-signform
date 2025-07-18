@@ -1,7 +1,7 @@
 import { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../configs/firebase";
 import { useNavigate } from "react-router";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 
 export default function RegisterPage() {
@@ -14,7 +14,7 @@ export default function RegisterPage() {
     e.preventDefault();
     console.log(email, password);
     try {
-      const userLoggedIn = await createUserWithEmailAndPassword(
+      const userRegister = await createUserWithEmailAndPassword(
         auth,
         email,
         password
@@ -22,8 +22,9 @@ export default function RegisterPage() {
       console.log(userRegister);
       navigate("/");
     } catch (error) {
-      console.log(error);
-      alert("Failed to login: " + error.massage);
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode, "-", errorMessage);
     }
   }
 
@@ -54,12 +55,12 @@ export default function RegisterPage() {
         <form
           onSubmit={handleRegister}
           action=""
-          className="w-full flex flex-col gap-4"
+          className="w-full flex flex-col gap4"
         >
           <div className="flex flex-col gap-2">
             <label className="text-sm text-gray-900">Email</label>
             <input
-              type="email"
+              type="text"
               value={email}
               placeholder="example@mail.com"
               onChange={(e) => setEmail(e.target.value)}
@@ -70,7 +71,7 @@ export default function RegisterPage() {
             <label className="text-sm text-gray-900">Password</label>
             <div className="flex items-center w-full h-10 bg-slate-100 rounded-lg">
               <input
-                type={showpassword ? "text" : "password"}
+                type="password"
                 value={password}
                 placeholder="password"
                 onChange={(e) => setPassword(e.target.value)}
@@ -88,42 +89,8 @@ export default function RegisterPage() {
               </div>
             </div>
           </div>
-          <button
-            type="submit"
-            className="w-full bg-slate-800 text-white text-base py-3 rounded-xl cursor-pointer"
-          >
-            Sign In
-          </button>
+          <button type="submit">Register</button>
         </form>
-
-        <div className="w-full flex items-center gap-4">
-          <hr className="flex-1 border-slate-300" />
-          <span className="text-sm text-slate-700">Or sign in with</span>
-          <hr className="flex-1 border-slate-300" />
-        </div>
-
-        <div className="w-full flex gap-4">
-          <button className="flex-1 flex items-center justify-center gap-3 bg-slate-100 py-2 px-2 rounded-lg cursor-pointer">
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/800px-Google_%22G%22_logo.svg.png"
-              className="w-6 h-6"
-              alt="Google"
-            />
-            <span className="text-base text-slate-700">
-              Continue with Google
-            </span>
-          </button>
-        </div>
-
-        <div className="text-center text-sm md:text-base text-slate-700">
-          Don’t you have an account?{" "}
-          <span
-            className="text-blue-700 cursor-pointer"
-            onClick={() => navigate("/auth/login")}
-          >
-            Sign in
-          </span>
-        </div>
       </div>
     </div>
   );
