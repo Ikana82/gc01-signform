@@ -30,14 +30,14 @@ export default function LoginPage() {
       {/* Left Side (Image atau Banner) */}
       <div className="w-full md:w-1/2 flex justify-center items-center">
         <img
-          src="https://diorama.dam-broadcast.com/cdn-cgi/image/width=640,format=auto/pm_11872_1107_1107393-gp3uwu9pt6-whr.jpg"
+          src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           alt="Fashion"
-          className="w-full h-44 md:h-[600px] object-cover rounded-[20px]"
+          className="w-full h-44 md:h-[550px] md:w-[600px] object-cover rounded-[20px]"
         />
       </div>
 
       {/* Right Side (Form login and register) */}
-      <div className="w-full md:w-1/2 px-6 md:px-16 py-6 flex flex-col justify-start items-center gap-6">
+      <div className="w-full md:w-1/2 px-6 md:px-16 py-6 flex flex-col justify-center items-center gap-6">
         {/* Header */}
         <div className="w-full flex flex-col gap-4">
           <div className="text-2xl md:text-4xl font-semibold text-gray-900">
@@ -76,7 +76,7 @@ export default function LoginPage() {
           </div>
           <button
             type="submit"
-            className="w-full bg-slate-800 text-white text-base py-3 rounded-xl"
+            className="w-full bg-slate-800 text-white text-base py-3 rounded-xl cursor-pointer"
           >
             Sign In
           </button>
@@ -89,7 +89,26 @@ export default function LoginPage() {
         </div>
 
         <div className="w-full flex gap-4">
-          <button className="flex-1 flex"></button>
+          <button className="flex-1 flex items-center justify-center gap-3 bg-slate-100 py-2 px-2 rounded-lg cursor-pointer">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/800px-Google_%22G%22_logo.svg.png"
+              className="w-6 h-6"
+              alt="Google"
+            />
+            <span className="text-base text-slate-700">
+              Continue with Google
+            </span>
+          </button>
+        </div>
+
+        <div className="text-center text-sm md:text-base text-slate-700">
+          Don’t you have an account?{" "}
+          <span
+            className="text-blue-700 cursor-pointer"
+            onClick={() => navigate("/auth/register")}
+          >
+            Sign up
+          </span>
         </div>
       </div>
     </div>
