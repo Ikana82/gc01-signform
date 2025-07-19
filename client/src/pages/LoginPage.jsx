@@ -9,7 +9,8 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const [showpassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -19,7 +20,9 @@ export default function LoginPage() {
       return;
     }
 
-    console.log(email, password);
+    setIsLoading(true);
+
+    // console.log(email, password);
     try {
       const userLoggedIn = await signInWithEmailAndPassword(
         auth,
@@ -31,11 +34,13 @@ export default function LoginPage() {
     } catch (error) {
       console.log(error);
       toast.error("Whoops! That combo doesn’t work. Try again.");
+    } finally {
+      setIsLoading(false);
     }
   }
 
   return (
-    <div className="w-full bg-white flex flex-col md:flex-row overflow-hidden">
+    <div className="min-h-screen bg-white flex flex-col md:flex-row overflow-hidden">
       <Toaster position="top-right" reverseOrder={false} />
       {/* Left Side (Image atau Banner) */}
       <div className="w-full md:w-1/2 flex justify-center items-center">
@@ -78,7 +83,7 @@ export default function LoginPage() {
             <label className="text-sm text-gray-900">Password</label>
             <div className="flex items-center w-full h-10 bg-slate-100 rounded-lg">
               <input
-                type={showpassword ? "text" : "password"}
+                type={showPassword ? "text" : "password"}
                 value={password}
                 placeholder="Type password here"
                 onChange={(e) => setPassword(e.target.value)}
@@ -90,17 +95,25 @@ export default function LoginPage() {
                     ? "opacity-100 text-gray-700"
                     : "opacity-50 text-gray-400"
                 }`}
-                onClick={() => setShowPassword(!showpassword)}
+                onClick={() => setShowPassword(!showPassword)}
               >
-                {showpassword ? <IoEye size={20} /> : <IoEyeOff size={20} />}
+                {showPassword ? <IoEye size={20} /> : <IoEyeOff size={20} />}
               </div>
             </div>
           </div>
           <button
             type="submit"
+            disabled={isLoading}
             className="w-full bg-[#ff0000] text-white text-base py-3 rounded-xl cursor-pointer"
           >
-            Sign In
+            {isLoading ? (
+              <div className="flex items-center justify-center gap-2">
+                <span className="loading loading-spinner text-white"></span>
+                Please wait...
+              </div>
+            ) : (
+              "Sign In"
+            )}
           </button>
         </form>
 

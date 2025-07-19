@@ -7,12 +7,14 @@ export default function MainLayout() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       console.log(user);
       if (!user) {
-        navigate("/auth/login");
+        navigate("/auth/login", { replace: true });
       }
     });
+
+    return () => unsubscribe();
   }, []);
 
   return (

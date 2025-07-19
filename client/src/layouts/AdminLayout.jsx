@@ -10,7 +10,7 @@ export default function AdminLayout() {
     onAuthStateChanged(auth, (user) => {
       console.log(user);
       if (user) {
-        navigate("/");
+        navigate("/auth/login");
       }
       setLoadPage(false);
     });

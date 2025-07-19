@@ -10,8 +10,8 @@ export default function HomePage() {
   async function handleLogout() {
     try {
       await signOut(auth);
-      console.log(result);
-      navigate("/auth/login");
+      console.log("Logout Success");
+      navigate("/auth/login", { replace: true });
     } catch (error) {
       console.log(error);
     }

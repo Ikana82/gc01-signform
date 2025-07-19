@@ -4,19 +4,35 @@ import { useNavigate } from "react-router";
 import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import toast, { Toaster } from "react-hot-toast";
+import { db } from "../configs/firebase";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [phone, setPhone] = useState("");
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [confirmpassword, setConfirmPassword] = useState("");
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoadingCreate, setIsLoadingCreate] = useState(false);
 
   async function handleRegister(e) {
     e.preventDefault();
 
-    if (!email || !password || !confirmpassword) {
+    if (!/^\d{10,13}$/.test(phone)) {
+      toast.error("Phone number must be 10-13 digits");
+      return;
+    }
+
+    if (
+      !username.trim() ||
+      !email.trim() ||
+      !password.trim() ||
+      !confirmpassword.trim() ||
+      !phone.trim()
+    ) {
       toast.error("All fields are required");
       return;
     }
@@ -25,16 +41,25 @@ export default function RegisterPage() {
       toast.error("Oops! Those passwords don’t match. Try again");
       return;
     }
+
+    setIsLoadingCreate(true);
+
     try {
       const userLoggedIn = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
+      const user = userLoggedIn.user;
+      await setDoc(doc(db, "users", user.uid), {
+        username,
+        email,
+        phone,
+        createdAt: serverTimestamp(),
+      });
       await signOut(auth);
       // console.log(userLoggedIn);
       toast.success("Account created successfully!");
-      setTimeout(() => 5000);
       navigate("/auth/login");
     } catch (error) {
       console.log(error);
@@ -43,6 +68,8 @@ export default function RegisterPage() {
       } else {
         toast.error("Failed to register: " + error.message);
       }
+    } finally {
+      setIsLoadingCreate(false);
     }
   }
 
@@ -77,11 +104,22 @@ export default function RegisterPage() {
           className="w-full flex flex-col gap-4"
         >
           <div className="flex flex-col gap-2">
+            <label className="text-sm text-gray-900">Username</label>
+            <input
+              type="text"
+              value={username}
+              placeholder="Username"
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full h-10 px-3 bg-slate-100 rounded-lg outline-gray-300 text-sm placeholder-gray-400 placeholder:text-sm placeholder:italic"
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
             <label className="text-sm text-gray-900">Email</label>
             <input
               type="email"
               value={email}
-              placeholder="example@mail.com"
+              placeholder="Example@mail.com"
               onChange={(e) => setEmail(e.target.value)}
               className="w-full h-10 px-3 bg-slate-100 rounded-lg outline-gray-300 text-sm placeholder-gray-400 placeholder:text-sm placeholder:italic"
             />
@@ -136,11 +174,31 @@ export default function RegisterPage() {
               </div>
             </div>
           </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="text-sm text-gray-900">Phone Number</label>
+            <input
+              type="text"
+              value={phone}
+              placeholder="081xxxxxxxx"
+              onChange={(e) => setPhone(e.target.value)}
+              className="w-full h-10 px-3 bg-slate-100 rounded-lg outline-gray-300 text-sm placeholder-gray-400 placeholder:text-sm placeholder:italic"
+            />
+          </div>
+
           <button
             type="submit"
+            disabled={isLoadingCreate}
             className="w-full bg-[#ff0000] text-white text-base py-3 rounded-xl cursor-pointer"
           >
-            Sign Up
+            {isLoadingCreate ? (
+              <div className="flex items-center justify-center gap-2">
+                <span className="loading loading-spinner text-white"></span>
+                Creating Account...
+              </div>
+            ) : (
+              "Sign Up"
+            )}
           </button>
         </form>
 
