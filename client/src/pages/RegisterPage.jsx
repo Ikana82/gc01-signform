@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { auth } from "../configs/firebase";
 import { useNavigate } from "react-router";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -31,10 +31,11 @@ export default function RegisterPage() {
         email,
         password
       );
-      console.log(userLoggedIn);
+      await signOut(auth);
+      // console.log(userLoggedIn);
       toast.success("Account created successfully!");
-      setTimeout(() => navigate("/auth/login"), 2000);
-      // navigate("/");
+      setTimeout(() => 5000);
+      navigate("/auth/login");
     } catch (error) {
       console.log(error);
       if (error.code === "auth/email-already-in-use") {
@@ -137,7 +138,7 @@ export default function RegisterPage() {
           </div>
           <button
             type="submit"
-            className="w-full bg-slate-800 text-white text-base py-3 rounded-xl cursor-pointer"
+            className="w-full bg-[#ff0000] text-white text-base py-3 rounded-xl cursor-pointer"
           >
             Sign Up
           </button>

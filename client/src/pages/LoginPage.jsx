@@ -98,7 +98,7 @@ export default function LoginPage() {
           </div>
           <button
             type="submit"
-            className="w-full bg-slate-800 text-white text-base py-3 rounded-xl cursor-pointer"
+            className="w-full bg-[#ff0000] text-white text-base py-3 rounded-xl cursor-pointer"
           >
             Sign In
           </button>
