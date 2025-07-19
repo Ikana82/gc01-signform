@@ -2,6 +2,10 @@ export default function Navbar() {
   return (
     <nav className="bg-[#ff0000] text-white p-4 shadow-md w-full">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
+        <img
+          className="w-[40px] h-[30px] left-0 top-[79px]e"
+          src="https://placehold.co/1728x1038"
+        />
         <h1 className="text-lg font-bold">Kanara Fashion</h1>
         <ul className="flex space-x-4">
           <li>
