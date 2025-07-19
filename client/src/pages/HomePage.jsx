@@ -19,8 +19,13 @@ export default function HomePage() {
 
   return (
     <>
-      <div>Ada Content</div>
-      <button onClick={handleLogout}>Logout</button>
+      {/* <div className="text-lg font-medium text-gray-700 mb-4">Ada Content</div> */}
+      <button
+        onClick={handleLogout}
+        className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg shadow-md transition duration-300 ease-in-out"
+      >
+        Logout
+      </button>
     </>
   );
 }
