@@ -74,7 +74,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="w-full bg-white flex flex-col md:flex-row overflow-hidden">
+    <div className="w-full bg-white flex flex-col md:flex-row overflow-hidden px-6 py-6">
       <Toaster position="top-right" reverseOrder={false} />
       {/* Left Side (Image atau Banner) */}
       <div className="w-full md:w-1/2 flex justify-center items-center">
@@ -86,10 +86,10 @@ export default function RegisterPage() {
       </div>
 
       {/* Right Side (Form login and register) */}
-      <div className="w-full md:w-1/2 px-6 md:px-16 py-6 flex flex-col justify-center items-center gap-6">
+      <div className="w-full md:w-1/2 md:px-16 py-6 flex flex-col justify-center items-center gap-6">
         {/* Header */}
-        <div className="w-full flex flex-col gap-4">
-          <div className="text-2xl md:text-4xl font-semibold text-gray-900">
+        <div className="w-full flex flex-col gap-4 text-center">
+          <div className="text-2xl md:text-4xl font-semibold text-gray-900 ">
             Sign Up
           </div>
           <p className="text-base md:text-lg text-slate-700 leading-normal tracking-tight">
@@ -101,7 +101,7 @@ export default function RegisterPage() {
         <form
           onSubmit={handleRegister}
           action=""
-          className="w-full flex flex-col gap-4"
+          className="w-full flex flex-col gap-4 text-center"
         >
           <div className="flex flex-col gap-2">
             <label className="text-sm text-gray-900">Username</label>
