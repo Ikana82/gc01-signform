@@ -50,6 +50,7 @@ export default function LoginPage() {
 
   if (isLoadPage) return <div>Loading...</div>;
   // 4 end
+
   return (
     <div className="min-h-screen bg-white flex flex-col md:flex-row overflow-hidden">
       <Toaster position="top-right" reverseOrder={false} />
