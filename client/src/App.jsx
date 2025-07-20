@@ -1,5 +1,6 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router";
+import AuthContextProvider, { ProtectedRoute } from "./contexts/AuthContext"; // tambahan untuk context
 import AdminLayout from "./layouts/AdminLayout";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -9,17 +10,18 @@ import HomePage from "./pages/HomePage";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />,
+    element: (
+      <ProtectedRoute>
+        <MainLayout />
+      </ProtectedRoute>
+      // ditambah dengan "ProtectedRoute"
+    ),
     children: [
       {
         index: true,
         element: <HomePage />,
       },
     ],
-  },
-  {
-    path: "/",
-    element: <div>Hello World</div>,
   },
   {
     path: "/auth",
@@ -38,7 +40,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <AuthContextProvider>
+      <RouterProvider router={router} />
+    </AuthContextProvider>
+  );
 }
 
 export default App;
