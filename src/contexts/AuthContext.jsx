@@ -1,7 +1,6 @@
-import { useEffect, useState, createContext, useContext } from "react"; // 1 tambahkan usecontext untuk memanggil
+import { useEffect, useState, createContext } from "react"; // 1 tambahkan usecontext untuk memanggil
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../configs/firebase";
-import { Navigate } from "react-router";
 
 export const AuthContext = createContext({
   user: null,
@@ -16,11 +15,11 @@ export default function AuthContextProvider({ children }) {
   useEffect(() => {
     setLoadPage(true);
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      // if (user) {
-      setUser(user || null);
-      // } else {
-      //   setUser(null);
-      // }
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
       setLoadPage(false);
     });
 
@@ -37,13 +36,13 @@ export default function AuthContextProvider({ children }) {
 }
 
 // Ini bagian untuk membuat protectedroutenya nanti ya...
-export function ProtectedRoute({ children }) {
-  const { user } = useContext(AuthContext);
+// export function ProtectedRoute({ children }) {
+//   const { user } = useContext(AuthContext);
 
-  //yang diatas dipindah disini ya
-  if (!user) {
-    return <Navigate to="/auth/login" replace />;
-  }
+//   //yang diatas dipindah disini ya
+//   if (!user) {
+//     return <Navigate to="/auth/login" replace />;
+//   }
 
-  return children;
-}
+//   return children;
+// }

@@ -1,5 +1,4 @@
-import { useState, useContext, useEffect } from "react"; // 1
-import { AuthContext } from "../contexts/AuthContext"; // 2
+import { useState } from "react";
 import { auth } from "../configs/firebase";
 import { useNavigate } from "react-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -7,7 +6,6 @@ import { IoEye, IoEyeOff } from "react-icons/io5";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function LoginPage() {
-  const { user, isLoadPage } = useContext(AuthContext); // 3
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -40,16 +38,6 @@ export default function LoginPage() {
       setIsLoading(false);
     }
   }
-
-  // 4
-  useEffect(() => {
-    if (!isLoadPage && user) {
-      navigate("/", { replace: true });
-    }
-  }, [user, isLoadPage]);
-
-  if (isLoadPage) return <div>Loading...</div>;
-  // 4 end
 
   return (
     <div className="min-h-screen bg-white flex flex-col md:flex-row overflow-hidden px-6 py-6">

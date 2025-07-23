@@ -7,6 +7,7 @@ import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+//11-19 dimasukkan ke .env supaya jadi key secret code
 const firebaseConfig = {
   apiKey: "AIzaSyDahU3b7pgNVMpvDijrJAE6LuPKQ4YEvPg",
   authDomain: "fern-gc02-ika.firebaseapp.com",

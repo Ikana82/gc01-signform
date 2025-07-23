@@ -1,6 +1,6 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router";
-import AuthContextProvider, { ProtectedRoute } from "./contexts/AuthContext"; // tambahan untuk context
+import AuthContextProvider from "./contexts/AuthContext";
 import AdminLayout from "./layouts/AdminLayout";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -10,12 +10,7 @@ import HomePage from "./pages/HomePage";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <ProtectedRoute>
-        <MainLayout />
-      </ProtectedRoute>
-      // ditambah dengan "ProtectedRoute"
-    ),
+    element: <MainLayout />,
     children: [
       {
         index: true,
