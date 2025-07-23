@@ -1,23 +1,27 @@
-import { useEffect } from "react";
-import { auth } from "../configs/firebase";
+import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { Outlet, useNavigate } from "react-router";
+import { auth } from "../configs/firebase";
 
-export default function MainLayout() {
+export default function AdminLayout() {
+  const [isLoadPage, setLoadPage] = useState(true);
   const navigate = useNavigate();
-
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       console.log(user);
-      if (!user) {
+      if (user) {
         navigate("/auth/login");
       }
+      setLoadPage(false);
     });
   }, []);
 
+  if (isLoadPage) {
+    return <div>Loading...</div>;
+  }
   return (
     <>
-      <header>-- Home Side --</header>
+      {/* <header>Admin Side</header> */}
       <Outlet />
     </>
   );
