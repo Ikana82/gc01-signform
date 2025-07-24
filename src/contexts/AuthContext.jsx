@@ -1,4 +1,4 @@
-import { useEffect, useState, createContext } from "react"; // 1 tambahkan usecontext untuk memanggil
+import { useEffect, useState, createContext } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../configs/firebase";
 
@@ -34,15 +34,3 @@ export default function AuthContextProvider({ children }) {
 
   return <AuthContext value={value}>{children}</AuthContext>;
 }
-
-// Ini bagian untuk membuat protectedroutenya nanti ya...
-// export function ProtectedRoute({ children }) {
-//   const { user } = useContext(AuthContext);
-
-//   //yang diatas dipindah disini ya
-//   if (!user) {
-//     return <Navigate to="/auth/login" replace />;
-//   }
-
-//   return children;
-// }
