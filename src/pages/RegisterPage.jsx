@@ -1,7 +1,12 @@
 import { useState } from "react";
-import { auth } from "../configs/firebase";
+import { auth, googleProvider } from "../configs/firebase";
 import { useNavigate } from "react-router";
-import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signOut,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import toast, { Toaster } from "react-hot-toast";
 import { db } from "../configs/firebase";
@@ -70,6 +75,22 @@ export default function RegisterPage() {
       }
     } finally {
       setIsLoadingCreate(false);
+    }
+  }
+
+  async function handleGoogleLogin() {
+    try {
+      const oauthlogin = await signInWithPopup(auth, googleProvider);
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      const credential = GoogleAuthProvider.credentialFromResult(oauthlogin);
+      const token = credential.accessToken;
+      const user = oauthlogin.user;
+      console.log(credential, "<<<< credential");
+      console.log(token, "<<<< token");
+      console.log(user, "<<<<user");
+      navigate("/");
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -209,7 +230,10 @@ export default function RegisterPage() {
         </div>
 
         <div className="w-full flex gap-4">
-          <button className="flex-1 flex items-center justify-center gap-3 bg-slate-100 py-2 px-2 rounded-lg cursor-pointer">
+          <button
+            onClick={handleGoogleLogin}
+            className="flex-1 flex items-center justify-center gap-3 bg-slate-100 py-2 px-2 rounded-lg cursor-pointer"
+          >
             <img
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/800px-Google_%22G%22_logo.svg.png"
               className="w-6 h-6"
