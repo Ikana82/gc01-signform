@@ -1,0 +1,135 @@
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router";
+import { db } from "../configs/firebase";
+import { getDoc } from "firebase/firestore";
+
+export default function EditproductPage() {
+  const [name, setName] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [price, setPrice] = useState(0);
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
+  const [stock, setStock] = useState(0);
+  const navigate = useNavigate();
+  const { id } = useParams;
+  const dispatch = useDispatch();
+
+  async function editProduct(e) {
+    e.preventDefault();
+    try {
+      dispatch(
+        editProductById({
+          id,
+          name,
+          imageUrl,
+          price,
+          description,
+          category,
+          stock,
+        })
+      );
+      console.log("Successfully edit product with id", id);
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    async function getProductById(idProduct) {
+      try {
+        const docRef = doc(db, "products", idProduct);
+        const docSnap = await getDoc(docRef);
+
+        const product = {
+          name: docSnap.data().name,
+          imageUrl: docSnap.data().imageUrl,
+          price: docSnap.data().price,
+          description: docSnap.data().description,
+          category: docSnap.data().category,
+          stock: docSnap.data().stock,
+        };
+        setName(product.name);
+        setImageUrl(product.imageUrl);
+        setPrice(product.price);
+        setDescription(product.description);
+        setCategory(product.category);
+        setStock(product.stock);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getProductById(id);
+  }, []);
+
+  return (
+    <>
+      <h1>Edit</h1>
+      <form onSubmit={editProduct} action="">
+        <div>
+          <label>Product Name</label>
+          <br />
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Image Url</label>
+          <br />
+          <input
+            type="text"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Price</label>
+          <br />
+          <input
+            type="number"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Description</label>
+          <br />
+          <input
+            type="text"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Category</label>
+          <br />
+          <input
+            type="text"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Stock</label>
+          <br />
+          <input
+            type="number"
+            value={stock}
+            onChange={(e) => setStock(e.target.value)}
+          />
+        </div>
+        <button>Submit</button>
+      </form>
+      <button
+        onClick={() => {
+          console.log(product);
+        }}
+      >
+        Cek data dong
+      </button>
+    </>
+  );
+}
