@@ -1,14 +1,14 @@
 import { signOut } from "firebase/auth";
 import { auth } from "../configs/firebase";
 import { Link, useNavigate } from "react-router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// Import Redux actions yang diperlukan
+
 import {
   increment,
   decrement,
   incrementByAmount,
-} from "../redux/features/counter/counterSlice"; // Asumsi path ini
+} from "../redux/features/counter/counterSlice";
 import {
   fetchProducts,
   deleteProduct as deleteWithRedux,
@@ -16,11 +16,10 @@ import {
 
 export default function HomePage() {
   const count = useSelector((state) => state.counter.value);
-  const { products, isLoading, error } = useSelector((state) => state.product); // Menggunakan 'products'
+  const { products, isLoading, error } = useSelector((state) => state.product);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  //
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -46,81 +45,150 @@ export default function HomePage() {
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
+
   console.log(products);
 
   return (
     <>
-      <main>
-        <h1>Product List</h1>
-        <button onClick={() => dispatch(increment())}>
-          Count increment by 1 : {count}
-        </button>{" "}
-        <button onClick={() => dispatch(decrement())}>
-          Count decrement by 1 : {count}
-        </button>{" "}
-        <button onClick={() => dispatch(incrementByAmount(100))}>
-          Count increment by 100 : {count}
-        </button>{" "}
-        <br />
-        <button onClick={() => navigate("/add")}>Add Product</button>
-        <table border="1">
-          <thead>
-            {" "}
-            {/* Menambahkan thead untuk semantic HTML */}
-            <tr>
-              <th>No</th>
-              <th>Name</th>
-              <th>Image</th>
-              <th>Price</th>
-              <th>Description</th>
-              <th>Category</th>
-              <th>Stock</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {" "}
-            {/* Menambahkan tbody untuk semantic HTML */}
-            {error && (
+      <main className="p-6">
+        <div className="mb-6 flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-neutral-800">Product List</h1>
+        </div>
+        <div className="flex justify-between items-center mb-6">
+          <div className="w-fit p-1 bg-rose-100 rounded-lg flex justify-between items-center gap-2">
+            <div className="px-3 py-1.5 bg-white rounded-md flex justify-center items-center gap-1 cursor-pointer">
+              <div className="text-black text-base font-sm leading-tight">
+                All Products
+              </div>
+
+              <div className="text-red-600 text-sm font-bold">
+                ({products.length})
+              </div>
+            </div>
+            <div className="px-3 py-1.5 flex justify-center items-center cursor-pointer">
+              <div className="text-neutral-600 text-base font-sm leading-tight">
+                Available
+              </div>
+            </div>
+            <div className="px-3 py-1.5 flex justify-center items-center cursor-pointer">
+              <div className="text-neutral-600 text-base font-sm leading-tight">
+                Out of Stock
+              </div>
+            </div>
+            <div className="px-3 py-1.5 flex justify-center items-center cursor-pointer">
+              <div className="text-neutral-600 text-base font-sm leading-tight">
+                Discontinued
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-end items-center gap-7">
+            <div>
+              <button
+                onClick={() => navigate("/add")}
+                className="bg-[#ff0000] text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+              >
+                + Add Product
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="overflow-x-auto bg-white rounded-lg shadow mt-6">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
               <tr>
-                <td colSpan="8">Failed to fetch product</td>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  No.
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Image
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Product
+                </th>
+
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Price
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Description
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Category
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Stock
+                </th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Action
+                </th>
               </tr>
-            )}{" "}
-            {/* colSpan untuk error message */}
-            {isLoading && (
-              <tr>
-                <td colSpan="8">Loading...</td>
-              </tr>
-            )}{" "}
-            {/* colSpan untuk loading message */}
-            {
-              !isLoading &&
-              !error &&
-              Array.isArray(products) &&
-              products.length > 0 // Memastikan products ada dan tidak kosong
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {isLoading && (
+                <tr>
+                  <td
+                    colSpan="8"
+                    className="px-6 py-4 text-center text-sm text-gray-500"
+                  >
+                    Loading products...
+                  </td>
+                </tr>
+              )}
+              {error && (
+                <tr>
+                  <td
+                    colSpan="8"
+                    className="px-6 py-4 text-center text-sm text-red-600"
+                  >
+                    Failed to fetch products: {error.message}
+                  </td>
+                </tr>
+              )}
+              {!isLoading && Array.isArray(products) && products.length > 0
                 ? products.map((p, index) => (
                     <tr key={p.id}>
-                      <td>{index + 1}</td>
-                      <td>{p.name}</td>
-                      <td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {index + 1}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
                         <img
-                          width="100px"
+                          width="60px"
+                          height="60px"
                           src={p.imageUrl}
                           alt={p.name}
                           onError={(e) =>
-                            (e.target.src = "https://via.placeholder.com/100")
+                            (e.target.src = "https://via.placeholder.com/60")
                           }
+                          className="rounded-md object-cover"
                         />
                       </td>
-                      <td>{p.price}</td>
-                      <td>{p.description}</td>
-                      <td>{p.category}</td>
-                      <td>{p.stock}</td>
-                      <td>
-                        <button onClick={() => navigate(`/edit/${p.id}`)}>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {p.name}
+                      </td>
+
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        Rp{p.price}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 truncate max-w-xs">
+                        {p.description || "No description"}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {p.category}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {p.stock}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <Link
+                          to={`/edit/${p.id}`}
+                          className="text-[#ff0000] hover:text-red-700 mr-2"
+                        >
                           Edit
-                        </button>
-                        <button onClick={() => deleteProduct(p.id)}>
+                        </Link>
+                        <button
+                          onClick={() => deleteProduct(p.id)}
+                          className="text-red-600 hover:text-red-900"
+                        >
                           Delete
                         </button>
                       </td>
@@ -129,22 +197,18 @@ export default function HomePage() {
                 : !isLoading &&
                   !error && (
                     <tr>
-                      <td colSpan="8">No products found.</td>
+                      <td
+                        colSpan="8"
+                        className="px-6 py-4 text-center text-sm text-gray-500"
+                      >
+                        No products found.
+                      </td>
                     </tr>
-                  ) // Menampilkan pesan jika tidak ada produk
-            }
-          </tbody>
-        </table>
+                  )}
+            </tbody>
+          </table>
+        </div>
       </main>
-      <button
-        onClick={handleLogout}
-        className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg shadow-md transition duration-300 ease-in-out"
-      >
-        Logout
-      </button>
-      <div>
-        <Link to="/about">to About</Link>
-      </div>
     </>
   );
 }

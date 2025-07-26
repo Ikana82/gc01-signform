@@ -1,62 +1,43 @@
-import { IoCartOutline, IoSearchSharp } from "react-icons/io5";
-import { FiLogOut } from "react-icons/fi";
-import LogoKanara from "../assets/logokanara.png";
-import { signOut } from "firebase/auth";
-import { auth } from "../configs/firebase";
-import { useNavigate } from "react-router";
+import React from "react";
+import { IoIosSearch, IoIosNotifications, IoMdSettings } from "react-icons/io";
+import { CgProfile } from "react-icons/cg";
 
-export default function Navbar() {
-  const navigate = useNavigate();
-
-  async function handleLogout() {
-    try {
-      await signOut(auth);
-      console.log("Logout Success");
-      navigate("/auth/login", { replace: true });
-    } catch (error) {
-      console.error("Logout Failed:", error);
-    }
-  }
-
+export default function Navbar({ isSidebarOpen }) {
   return (
-    <>
-      <div className="w-full bg-white border-b border-zinc-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          {/* Logo & Brand */}
-          <div className="flex items-center gap-3">
-            <img
-              src={LogoKanara}
-              alt="Kanara Logo"
-              className="w-12 h-12 object-contain rounded-sm"
-            />
-            <span className="text-red-600 text-xl font-bold font-poppins">
-              Kanara Fashion
-            </span>
-          </div>
+    <nav
+      className={`fixed top-0 right-0 h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 transition-all duration-300 ease-in-out z-10 ${
+        isSidebarOpen ? "left-64" : "left-20"
+      }`}
+    >
+      <div className="relative flex items-center flex-grow max-w-md ml-4">
+        <IoIosSearch className="absolute left-3 text-neutral-400 text-xl" />
+        <input
+          type="text"
+          placeholder="Search anything..."
+          className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-red-500"
+        />
+      </div>
 
-          {/* Search Bar */}
-          <div className="hidden md:flex w-full max-w-md items-center gap-3 px-4 py-2 border border-zinc-300 rounded-md shadow-sm">
-            <IoSearchSharp className="text-zinc-500 text-xl" />
-            <input
-              type="text"
-              placeholder="Search"
-              className="w-full outline-none font-poppins text-zinc-700"
-            />
-          </div>
+      <div className="flex items-center gap-4 ml-auto">
+        <button className="p-2 rounded-full hover:bg-gray-100 transition-colors text-neutral-500">
+          <IoIosNotifications className="text-2xl" />
+        </button>
 
-          {/* Cart & Logout */}
-          <div className="flex items-center gap-6">
-            <IoCartOutline className="text-2xl text-zinc-700 cursor-pointer hover:text-red-600 transition" />
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-all"
-            >
-              <FiLogOut className="text-lg" />
-              <span className="font-poppins text-base">Logout</span>
-            </button>
-          </div>
+        <button className="p-2 rounded-full hover:bg-gray-100 transition-colors text-neutral-500">
+          <IoMdSettings className="text-2xl" />
+        </button>
+
+        <div className="flex items-center gap-2 cursor-pointer">
+          <img
+            className="w-9 h-9 rounded-full object-cover"
+            src="https://placehold.co/40x40"
+            alt="User Profile"
+          />
+          <span className="text-neutral-800 text-base font-medium whitespace-nowrap hidden md:block">
+            John Doe
+          </span>
         </div>
       </div>
-    </>
+    </nav>
   );
 }
