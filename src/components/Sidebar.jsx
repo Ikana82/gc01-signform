@@ -213,7 +213,7 @@ export default function Sidebar() {
             mx-auto w-full max-w-[calc(100%-1rem)] px-3.5 py-3
             bg-white rounded-md shadow-sm flex items-center gap-3
             hover:bg-gray-100 transition-colors duration-200
-            ${isOpen ? "justify-start" : "justify-center"}
+            ${isOpen ? "justify-center" : "justify-center"}
           `}
         >
           <FiLogOut className={`${iconSize} text-teal-950`} />

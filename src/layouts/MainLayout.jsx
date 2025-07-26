@@ -30,14 +30,14 @@ export default function MainLayout() {
       {/* Konten Utama (Navbar + Outlet) */}
       <div
         className={`flex-1 flex flex-col transition-all duration-300 ease-in-out ${
-          isSidebarOpen ? "ml-4" : "ml-8" // Sesuaikan margin kiri sesuai lebar sidebar
+          isSidebarOpen ? "ml-6" : "ml-6" // Sesuaikan margin kiri sesuai lebar sidebar
         }`}
       >
         {/* Navbar */}
-        <Navbar isSidebarOpen={isSidebarOpen} />
+        <Navbar isSidebarOpen={isSidebarOpen} className="p-6 pb-2" />
 
         {/* Outlet (Konten Halaman Spesifik) */}
-        <main className="flex-1 p-6 pt-20">
+        <main className="flex-1 p-6 pt-12">
           {" "}
           {/* Tambahkan padding atas untuk menghindari tumpang tindih dengan navbar */}
           <Outlet />

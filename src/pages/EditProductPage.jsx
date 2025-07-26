@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { db } from "../configs/firebase";
 import { getDoc, doc } from "firebase/firestore";
-import { editProductById } from "../redux/features/product/productSlice";
+import {
+  editProductById,
+  fetchProductById,
+} from "../redux/features/product/productSlice";
+import { FileUploaderRegular } from "@uploadcare/react-uploader";
+import "@uploadcare/react-uploader/core.css";
 
 export default function EditproductPage() {
   const [name, setName] = useState("");
@@ -15,6 +20,7 @@ export default function EditproductPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const dispatch = useDispatch();
+  const product = useSelector((state) => state.product.productById);
 
   async function editProduct(e) {
     e.preventDefault();
@@ -43,18 +49,6 @@ export default function EditproductPage() {
         const docRef = doc(db, "products", idProduct);
         const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) {
-          const product = docSnap.data();
-          setName(product.name);
-          setImageUrl(product.imageUrl);
-          setPrice(product.price);
-          setDescription(product.description);
-          setCategory(product.category);
-          setStock(product.stock);
-        } else {
-          console.log("Product not found");
-        }
-
         const product = {
           name: docSnap.data().name,
           imageUrl: docSnap.data().imageUrl,
@@ -76,6 +70,21 @@ export default function EditproductPage() {
     getProductById(id);
   }, []);
 
+  useEffect(() => {
+    dispatch(fetchProductById(id));
+  }, []);
+
+  useEffect(() => {
+    if (product) {
+      setName(product.name);
+      setImageUrl(product.imageUrl);
+      setPrice(product.price);
+      setDescription(product.description);
+      setCategory(product.category);
+      setStock(product.stock);
+    }
+  }, [product]);
+
   return (
     <>
       <h1>Edit</h1>
@@ -96,6 +105,14 @@ export default function EditproductPage() {
             type="text"
             value={imageUrl}
             onChange={(e) => setImageUrl(e.target.value)}
+            disabled={true}
+          />
+          <FileUploaderRegular
+            pubkey="33563ee22dfa473493de"
+            onFileUploadSuccess={(result) => {
+              console.log("Successfully upload file");
+              setImageUrl(result.cdnUrl);
+            }}
           />
         </div>
         <div>

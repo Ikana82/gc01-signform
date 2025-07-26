@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { addProduct } from "../redux/features/product/productSlice.js";
+import UploadWidget from "../components/UploadWidget.jsx";
 
 export default function AddproductPage() {
   const [name, setName] = useState("");
@@ -53,6 +54,7 @@ export default function AddproductPage() {
             value={imageUrl}
             onChange={(e) => setImageUrl(e.target.value)}
           />
+          <UploadWidget setImageUrl={setImageUrl} />
         </div>
         <div>
           <label>Price</label>
