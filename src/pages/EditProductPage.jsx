@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { db } from "../configs/firebase";
-import { getDoc } from "firebase/firestore";
+import { getDoc, doc } from "firebase/firestore";
+import { editProductById } from "../redux/features/product/productSlice";
 
 export default function EditproductPage() {
   const [name, setName] = useState("");
@@ -12,27 +13,27 @@ export default function EditproductPage() {
   const [category, setCategory] = useState("");
   const [stock, setStock] = useState(0);
   const navigate = useNavigate();
-  const { id } = useParams;
+  const { id } = useParams();
   const dispatch = useDispatch();
 
   async function editProduct(e) {
     e.preventDefault();
     try {
-      dispatch(
+      await dispatch(
         editProductById({
           id,
           name,
           imageUrl,
-          price,
+          price: Number(price),
           description,
           category,
-          stock,
+          stock: Number(stock),
         })
       );
-      console.log("Successfully edit product with id", id);
+      console.log("Successfully edited product with id", id);
       navigate("/");
     } catch (error) {
-      console.log(error);
+      console.log("Failed to edit product:", error);
     }
   }
 
@@ -41,6 +42,18 @@ export default function EditproductPage() {
       try {
         const docRef = doc(db, "products", idProduct);
         const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const product = docSnap.data();
+          setName(product.name);
+          setImageUrl(product.imageUrl);
+          setPrice(product.price);
+          setDescription(product.description);
+          setCategory(product.category);
+          setStock(product.stock);
+        } else {
+          console.log("Product not found");
+        }
 
         const product = {
           name: docSnap.data().name,
@@ -125,7 +138,7 @@ export default function EditproductPage() {
       </form>
       <button
         onClick={() => {
-          console.log(product);
+          console.log({ name, imageUrl, price, description, category, stock });
         }}
       >
         Cek data dong

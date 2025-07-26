@@ -3,50 +3,53 @@ import { auth } from "../configs/firebase";
 import { Link, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { increment } from "firebase/firestore";
+// Import Redux actions yang diperlukan
+import {
+  increment,
+  decrement,
+  incrementByAmount,
+} from "../redux/features/counter/counterSlice"; // Asumsi path ini
+import {
+  fetchProducts,
+  deleteProduct as deleteWithRedux,
+} from "../redux/features/product/productSlice";
 
 export default function HomePage() {
-  // const [products, setProducts] = useState([]);
   const count = useSelector((state) => state.counter.value);
-  const { products, isLoading, error } = useSelector((state) => state.product);
+  const { products, isLoading, error } = useSelector((state) => state.product); // Menggunakan 'products'
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  async function handleLogout() {
+  //
+  const handleLogout = async () => {
     try {
       await signOut(auth);
       console.log("Logout Success");
       navigate("/auth/login", { replace: true });
     } catch (error) {
-      console.log(error);
+      console.log("Logout error:", error);
     }
-  }
+  };
 
-  // -- INI NANTI DIHAPUS --
-  // async function getProducts() {
-  //   const querySnapshot = await getDocs(collection(db, 'products'));
-  //   const result = querySnapshot.docs.map((doc) => {
-  //     return {
-  //       id: doc.id,
-  //       ...doc.data(), // =>  object { name, imageUrl, price }
-  //     };
-  //   });
-  //   setProducts(result);
-  // }
-  // -----------------------
-
-  async function deleteProduct(id) {
-    dispatch(deleteProductWithRedux(id));
-  }
+  const deleteProduct = async (id) => {
+    const confirmDelete = confirm(
+      "Are you sure you want to delete this product?"
+    );
+    if (!confirmDelete) return;
+    try {
+      await dispatch(deleteWithRedux(id));
+    } catch (error) {
+      console.error("Failed to delete product:", error);
+    }
+  };
 
   useEffect(() => {
     dispatch(fetchProducts());
-    //getProducts();
-  }, []);
+  }, [dispatch]);
+  console.log(products);
 
   return (
     <>
-      {/* <div className="text-lg font-medium text-gray-700 mb-4">Ada Content</div> */}
       <main>
         <h1>Product List</h1>
         <button onClick={() => dispatch(increment())}>
@@ -59,40 +62,78 @@ export default function HomePage() {
           Count increment by 100 : {count}
         </button>{" "}
         <br />
-        <button onClick={() => navigate("products/add")}>Add Product</button>
+        <button onClick={() => navigate("/add")}>Add Product</button>
         <table border="1">
-          <tr>
-            <th>No</th>
-            <th>Name</th>
-            <th>Image</th>
-            <th>Price</th>
-            <th>Description</th>
-            <th>Category</th>
-            <th>Stock</th>
-            <th>Action</th>
-          </tr>
-          {error && <tr>Failed to fetch product</tr>}
-          {isLoading && <tr>Loading...</tr>}
-          {product.lengh > 0 &&
-            product.map((p, index) => (
-              <tr key={p.id}>
-                <td>{index + 1}</td>
-                <td>{p.name}</td>
-                <td>
-                  <img width="100px" src={p.imageUrl} alt={p.name} />
-                </td>
-                <td>{p.price}</td>
-                <td>{p.description}</td>
-                <td>{p.category}</td>
-                <td>{p.stock}</td>
-                <td>
-                  <button onClick={() => navigate(`/products/edit/${p.id}`)}>
-                    Edit
-                  </button>
-                  <button onClick={() => deleteProduct(p.id)}>Delete</button>
-                </td>
+          <thead>
+            {" "}
+            {/* Menambahkan thead untuk semantic HTML */}
+            <tr>
+              <th>No</th>
+              <th>Name</th>
+              <th>Image</th>
+              <th>Price</th>
+              <th>Description</th>
+              <th>Category</th>
+              <th>Stock</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {" "}
+            {/* Menambahkan tbody untuk semantic HTML */}
+            {error && (
+              <tr>
+                <td colSpan="8">Failed to fetch product</td>
               </tr>
-            ))}
+            )}{" "}
+            {/* colSpan untuk error message */}
+            {isLoading && (
+              <tr>
+                <td colSpan="8">Loading...</td>
+              </tr>
+            )}{" "}
+            {/* colSpan untuk loading message */}
+            {
+              !isLoading &&
+              !error &&
+              Array.isArray(products) &&
+              products.length > 0 // Memastikan products ada dan tidak kosong
+                ? products.map((p, index) => (
+                    <tr key={p.id}>
+                      <td>{index + 1}</td>
+                      <td>{p.name}</td>
+                      <td>
+                        <img
+                          width="100px"
+                          src={p.imageUrl}
+                          alt={p.name}
+                          onError={(e) =>
+                            (e.target.src = "https://via.placeholder.com/100")
+                          }
+                        />
+                      </td>
+                      <td>{p.price}</td>
+                      <td>{p.description}</td>
+                      <td>{p.category}</td>
+                      <td>{p.stock}</td>
+                      <td>
+                        <button onClick={() => navigate(`/edit/${p.id}`)}>
+                          Edit
+                        </button>
+                        <button onClick={() => deleteProduct(p.id)}>
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                : !isLoading &&
+                  !error && (
+                    <tr>
+                      <td colSpan="8">No products found.</td>
+                    </tr>
+                  ) // Menampilkan pesan jika tidak ada produk
+            }
+          </tbody>
         </table>
       </main>
       <button
@@ -102,7 +143,7 @@ export default function HomePage() {
         Logout
       </button>
       <div>
-        <Link to="about">to About</Link>
+        <Link to="/about">to About</Link>
       </div>
     </>
   );

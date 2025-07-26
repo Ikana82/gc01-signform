@@ -6,6 +6,8 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import MainLayout from "./layouts/MainLayout";
 import HomePage from "./pages/HomePage";
+import AddproductPage from "./pages/AddproductPage";
+import EditproductPage from "./pages/EditProductPage";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +17,14 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
+      },
+      {
+        path: "add",
+        element: <AddproductPage />,
+      },
+      {
+        path: "edit/:id",
+        element: <EditproductPage />,
       },
     ],
   },
