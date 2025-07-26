@@ -2,15 +2,11 @@ import React from "react";
 import { IoIosSearch, IoIosNotifications, IoMdSettings } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
 
-export default function Navbar({ isSidebarOpen }) {
+export default function Navbar() {
   return (
-    <nav
-      className={`fixed top-0 right-0 h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 transition-all duration-300 ease-in-out z-10 ${
-        isSidebarOpen ? "left-64" : "left-20"
-      }`}
-    >
-      <div className="relative flex items-center flex-grow max-w-md ml-4">
-        <IoIosSearch className="absolute left-3 text-neutral-400 text-xl" />
+    <nav className="h-full bg-white flex items-center justify-between px-8">
+      <div className="flex items-center flex-grow max-w-md">
+        {/* <IoIosSearch className="left-3 text-neutral-400 text-xl" /> */}
         <input
           type="text"
           placeholder="Search anything..."
@@ -19,11 +15,17 @@ export default function Navbar({ isSidebarOpen }) {
       </div>
 
       <div className="flex items-center gap-4 ml-auto">
-        <button className="p-2 rounded-full hover:bg-gray-100 transition-colors text-neutral-500">
+        <button
+          className="p-2 rounded-full hover:bg-gray-100 transition-colors text-neutral-500"
+          aria-label="Notifications"
+        >
           <IoIosNotifications className="text-2xl" />
         </button>
 
-        <button className="p-2 rounded-full hover:bg-gray-100 transition-colors text-neutral-500">
+        <button
+          className="p-2 rounded-full hover:bg-gray-100 transition-colors text-neutral-500"
+          aria-label="Settings"
+        >
           <IoMdSettings className="text-2xl" />
         </button>
 
@@ -34,7 +36,7 @@ export default function Navbar({ isSidebarOpen }) {
             alt="User Profile"
           />
           <span className="text-neutral-800 text-base font-medium whitespace-nowrap hidden md:block">
-            John Doe
+            Ika Nuraisma
           </span>
         </div>
       </div>

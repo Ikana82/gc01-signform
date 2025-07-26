@@ -13,14 +13,11 @@ import {
 import { FaBoxOpen } from "react-icons/fa";
 import { TbCategoryFilled } from "react-icons/tb";
 import { FiLogOut } from "react-icons/fi";
-import { MdNavigateNext } from "react-icons/md";
-import { GrFormPrevious } from "react-icons/gr";
 import { CgProfile } from "react-icons/cg";
 
 export default function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isOpen, setIsOpen] = useState(true);
 
   async function handleLogout() {
     try {
@@ -31,10 +28,6 @@ export default function Sidebar() {
       console.error("Logout Failed:", error);
     }
   }
-
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
 
   const isActive = (path) => {
     return location.pathname === path;
@@ -48,17 +41,17 @@ export default function Sidebar() {
       items: [
         {
           label: "Dashboard",
-          path: "/dashboard",
+          path: "#",
           icon: IoIosHome,
         },
         {
           label: "Categories",
-          path: "/categories",
+          path: "#",
           icon: TbCategoryFilled,
         },
         {
           label: "Transaction",
-          path: "/transactions",
+          path: "#",
           icon: IoIosCard,
         },
       ],
@@ -83,7 +76,7 @@ export default function Sidebar() {
       items: [
         {
           label: "Admin Role",
-          path: "/admin-role",
+          path: "#",
           icon: IoMdPerson,
         },
       ],
@@ -91,51 +84,31 @@ export default function Sidebar() {
   ];
 
   return (
-    <div
-      className={`relative h-screen bg-white border-r border-gray-200 flex flex-col transition-all duration-300 ease-in-out ${
-        isOpen ? "w-64" : "w-25"
-      }`}
-    >
-      <div className="p-5 flex justify-between items-center">
-        <div
-          className={`flex items-center gap-3 ${
-            !isOpen ? "opacity-0 w-0 overflow-hidden" : "opacity-100 w-auto"
-          }`}
-        >
-          <img
-            className="w-8 h-10 object-contain"
-            src={LogoKanara}
-            alt="Kanara Logo"
-          />
-          <span className="text-red-600 text-xl font-bold whitespace-nowrap">
-            Kanara
-          </span>
-        </div>
-
-        <button
-          onClick={toggleSidebar}
-          className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
-            isOpen ? "ml-auto" : "mx-auto"
-          }`}
-          aria-label={isOpen ? "Close sidebar" : "Open sidebar"}
-        >
-          {isOpen ? (
-            <GrFormPrevious className="text-2xl text-neutral-500" />
-          ) : (
-            <MdNavigateNext className="text-2xl text-neutral-500" />
-          )}
-        </button>
+    <div className="h-full w-56 bg-white border-r border-gray-100 flex flex-col">
+      {/* Logo and Title Section */}
+      <div className="p-5 flex items-center gap-3">
+        <img
+          className="w-8 h-10 object-contain"
+          src={LogoKanara}
+          alt="Kanara Logo"
+        />
+        <span className="text-red-600 text-xl font-bold whitespace-nowrap">
+          Kanara
+        </span>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-2">
+      {/* Main Navigation Section - Scrollable */}
+      <div className="flex-1 overflow-y-auto px-3">
         {menuSections.map((section, sectionIndex) => (
-          <div key={sectionIndex} className="mb-4">
-            {section.label && isOpen && (
-              <p className="text-neutral-500 text-xs font-semibold uppercase tracking-wider px-3.5 py-2">
+          <div key={sectionIndex} className="mb-4 last:mb-0">
+            {section.label && (
+              <p className="text-neutral-500 text-xs font-semibold uppercase tracking-wider px-3.5 py-2 mb-1">
                 {section.label}
               </p>
             )}
-            <nav className="flex flex-col">
+            <nav className="flex flex-col gap-1">
+              {" "}
+              {/* Added gap for spacing between items */}
               {section.items.map((item) => {
                 const IconComponent = item.icon;
                 const active = isActive(item.path);
@@ -144,18 +117,17 @@ export default function Sidebar() {
                     key={item.path}
                     onClick={() => navigate(item.path)}
                     className={`
-                      relative flex items-center gap-3 py-2.5 rounded-md text-left
-                      transition-colors duration-200
+                      relative flex items-center gap-3 py-2.5 px-3.5 rounded-md text-left
+                      transition-colors duration-200 group // Added group for hover effects on children
                       ${active ? "bg-red-600" : "hover:bg-gray-100"}
-                      ${
-                        isOpen ? "px-3.5" : "justify-center w-auto mx-auto"
-                      } /* Centered for closed state */
                     `}
                     aria-current={active ? "page" : undefined}
                   >
                     <IconComponent
                       className={`${iconSize} ${
-                        active ? "text-white" : "text-neutral-500"
+                        active
+                          ? "text-white"
+                          : "text-neutral-500 group-hover:text-neutral-700"
                       }`}
                     />
                     <span
@@ -164,9 +136,8 @@ export default function Sidebar() {
                         ${
                           active
                             ? "text-white font-semibold"
-                            : "text-neutral-700 font-normal"
+                            : "text-neutral-700 font-normal group-hover:text-neutral-800"
                         }
-                        ${!isOpen ? "hidden" : ""}
                       `}
                     >
                       {item.label}
@@ -179,48 +150,20 @@ export default function Sidebar() {
         ))}
       </div>
 
-      <div className="pb-5 pt-3 border-t border-gray-200">
-        <div
-          className={`
-            mx-auto w-full max-w-[calc(100%-1rem)] px-3.5 py-3 mb-3
-            bg-white rounded-lg shadow-sm border border-neutral-200
-            flex items-center gap-4 transition-all duration-200
-            ${!isOpen ? "justify-center" : ""}
-          `}
-        >
-          <img
-            className="w-10 h-10 rounded-full object-cover"
-            src="https://placehold.co/40x40"
-            alt="User Profile"
-          />
-          <div className={`flex flex-col ${!isOpen ? "hidden" : ""}`}>
-            <span className="text-neutral-800 text-sm font-semibold whitespace-nowrap">
-              Dealport
-            </span>
-            <span className="text-neutral-500 text-sm font-normal whitespace-nowrap overflow-hidden text-ellipsis">
-              Mark@thedesigner...
-            </span>
-          </div>
-
-          {isOpen && (
-            <CgProfile className={`${iconSize} text-neutral-500 ml-auto`} />
-          )}
-        </div>
-
+      {/* Profile and Logout Section */}
+      <div className="pb-5 pt-3 px-4 border-t border-gray-200">
         <button
           onClick={handleLogout}
           className={`
-            mx-auto w-full max-w-[calc(100%-1rem)] px-3.5 py-3
+            w-full px-3.5 py-3
             bg-white rounded-md shadow-sm flex items-center gap-3
             hover:bg-gray-100 transition-colors duration-200
-            ${isOpen ? "justify-center" : "justify-center"}
           `}
         >
           <FiLogOut className={`${iconSize} text-teal-950`} />
           <span
             className={`
               flex-1 text-teal-950 text-base font-medium whitespace-nowrap
-              ${!isOpen ? "hidden" : ""}
             `}
           >
             Logout
