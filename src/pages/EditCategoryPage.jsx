@@ -1,47 +1,100 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
-import { addCategory } from "../redux/features/category/categorySlice.js";
+import { useNavigate, useParams } from "react-router";
+import { getDoc, doc } from "firebase/firestore";
+import { db } from "../configs/firebase";
+import { editCategory } from "../redux/features/category/categorySlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function AddCategoryPage() {
+export default function EditCategoryPage() {
   const [category, setCategory] = useState("");
-  const [subCategory, setSubCategory] = useState([""]);
+  const [subCategory, setSubCategory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch();
+
+  const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    async function getCategoryData() {
+      try {
+        const docRef = doc(db, "categories", id);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const fetchedData = docSnap.data();
+          setCategory(fetchedData.category || "");
+          if (
+            Array.isArray(fetchedData.subCategory) &&
+            fetchedData.subCategory.length > 0
+          ) {
+            setSubCategory(fetchedData.subCategory);
+          } else {
+            setSubCategory([""]);
+          }
+        } else {
+          toast.error("Category not found");
+          navigate("/list-category");
+        }
+      } catch (error) {
+        toast.error("Error loading category");
+        console.error("Error loading category:", error);
+      }
+    }
+
+    if (id) {
+      getCategoryData();
+    }
+  }, [id, navigate]);
 
   const handleSubCategoryChange = (index, value) => {
-    const updated = [...subCategory];
-    updated[index] = value;
-    setSubCategory(updated);
+    const newSubCategories = [...subCategory];
+    newSubCategories[index] = value;
+    setSubCategory(newSubCategories);
   };
 
   const addMoreSubCategory = () => {
     setSubCategory([...subCategory, ""]);
   };
 
-  const deleteSubCategory = (index) => {
-    if (subCategory.length === 1) return;
-    setSubCategory(subCategory.filter((_, i) => i !== index));
+  const deleteSubCategory = (indexToDelete) => {
+    if (subCategory.length === 1) {
+      toast.warn("Minimal harus ada satu sub-kategori.");
+      return;
+    }
+    setSubCategory(subCategory.filter((_, index) => index !== indexToDelete));
   };
 
-  const submitCategory = async (e) => {
+  const handleEditCategory = async (e) => {
     e.preventDefault();
-
-    if (!category.trim()) return toast.error("Category name is required.");
-    if (subCategory.some((sub) => !sub.trim()))
-      return toast.error("Sub-category cannot be empty.");
+    if (!category.trim()) {
+      toast.error("Category name is required.");
+      return;
+    }
 
     setIsLoading(true);
     try {
-      await dispatch(addCategory({ category, subCategory }));
-      toast.success("Category added successfully!");
-      setTimeout(() => navigate("/list-category"), 2000);
+      const cleanedSubCategories = subCategory
+        .map((sub) => sub.trim())
+        .filter((sub) => sub !== "");
+
+      const success = await dispatch(
+        editCategory({
+          id,
+          category,
+          subCategory: cleanedSubCategories,
+        })
+      );
+
+      if (success) {
+        toast.success("Category updated successfully!");
+        setTimeout(() => navigate("/list-category"), 2000);
+      } else {
+        toast.error("Failed to update category.");
+      }
     } catch (error) {
-      console.error(error);
-      toast.error("Failed to add category.");
+      console.error("Failed to update category:", error);
+      toast.error("Failed to update category.");
     } finally {
       setIsLoading(false);
     }
@@ -52,14 +105,12 @@ export default function AddCategoryPage() {
       <ToastContainer position="top-right" autoClose={2000} />
       <main className="p-8 max-w-3xl mx-auto mt-4">
         <form
-          onSubmit={submitCategory}
+          onSubmit={handleEditCategory}
           className="p-6 bg-white rounded-3xl shadow-md outline outline-red-200 flex flex-col gap-4"
         >
-          <h2 className="text-zinc-800 text-xl font-semibold">
-            Add New Category
-          </h2>
+          <h2 className="text-zinc-800 text-xl font-semibold">Edit Category</h2>
           <p className="text-sm text-gray-700">
-            Create a new category and its sub-categories.
+            Update category and its sub-categories.
           </p>
 
           <div className="flex flex-col gap-1.5">
@@ -122,7 +173,7 @@ export default function AddCategoryPage() {
                 : "bg-[#ff0000] hover:bg-red-700"
             }`}
           >
-            {isLoading ? "Adding Category..." : "Submit"}
+            {isLoading ? "Updating Category..." : "Update"}
           </button>
         </form>
       </main>

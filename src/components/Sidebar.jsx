@@ -46,7 +46,7 @@ export default function Sidebar() {
         },
         {
           label: "Categories",
-          path: "#",
+          path: "/list-category",
           icon: TbCategoryFilled,
         },
         {

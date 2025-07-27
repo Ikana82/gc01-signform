@@ -1,15 +1,14 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import {
   addDoc,
   collection,
   deleteDoc,
   doc,
   getDoc,
-  updateDoc,
   getDocs,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../../../configs/firebase";
-import { setError, setLoading } from "../product/productSlice";
 
 const initialState = {
   categories: [],
@@ -26,7 +25,7 @@ const categorySlice = createSlice({
       state.categories = action.payload;
     },
     setCategory: (state, action) => {
-      state.categories = action.payload;
+      state.category = action.payload;
     },
     setLoading: (state, action) => {
       state.isLoading = action.payload;
@@ -44,7 +43,7 @@ export const fetchCategories = () => async (dispatch) => {
   dispatch(setLoading(true));
   dispatch(setError(null));
   try {
-    const querySnapshot = await getDoc(collection(db, "categories"));
+    const querySnapshot = await getDocs(collection(db, "categories"));
     const result = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
@@ -57,14 +56,20 @@ export const fetchCategories = () => async (dispatch) => {
   }
 };
 
-export const fetchCategoryById = (id) => async (dispatch) => {
+export const fetchCategoryById = (categoryId) => async (dispatch) => {
   dispatch(setLoading(true));
   dispatch(setError(null));
   try {
-    const docRef = doc(db, "categories", id);
+    const docRef = doc(db, "categories", categoryId);
     const docSnap = await getDoc(docRef);
+
     if (docSnap.exists()) {
-      dispatch(setCategory({ id: docSnap.id, ...docSnap.data() }));
+      dispatch(
+        setCategory({
+          id: docSnap.id,
+          ...docSnap.data(),
+        })
+      );
     } else {
       dispatch(setError("Category not found"));
     }
@@ -75,29 +80,13 @@ export const fetchCategoryById = (id) => async (dispatch) => {
   }
 };
 
-// Disini tempat untuk add new category
-export const addCategory = (newCategory) => async (dispatch) => {
+export const addCategory = (category) => async (dispatch) => {
   dispatch(setLoading(true));
   dispatch(setError(null));
   try {
-    await addDoc(collection(db, "categories", newCategory));
-    dispatch(fetchCategories());
-  } catch (error) {
-    dispatch(setError(error.message));
-  } finally {
-    dispatch(setLoading(false));
-  }
-};
-
-// Disini function untuk edit Category
-export const editCategory = (updateCategory) => async (dispatch) => {
-  dispatch(setLoading(true));
-  dispatch(setError(null));
-  try {
-    const docRef = doc(db, "categories", updateCategory.id);
-    await updateDoc(docRef, {
-      category: updateCategory.category,
-      subCategory: updateCategory.subCategory,
+    await addDoc(collection(db, "categories"), {
+      category: category.category,
+      subCategory: category.subCategory,
     });
     dispatch(fetchCategories());
   } catch (error) {
@@ -107,14 +96,33 @@ export const editCategory = (updateCategory) => async (dispatch) => {
   }
 };
 
-export const deleteCategory = (id) => async (dispatch) => {
+export const deleteCategory = (categoryId) => async (dispatch) => {
   dispatch(setLoading(true));
   dispatch(setError(null));
   try {
-    await deleteDoc(doc(db, "categories", id));
+    await deleteDoc(doc(db, "categories", categoryId));
     dispatch(fetchCategories());
   } catch (error) {
     dispatch(setError(error.message));
+  } finally {
+    dispatch(setLoading(false));
+  }
+};
+
+export const editCategory = (category) => async (dispatch) => {
+  dispatch(setLoading(true));
+  dispatch(setError(null));
+  try {
+    const docRef = doc(db, "categories", category.id);
+    await updateDoc(docRef, {
+      category: category.category,
+      subCategory: category.subCategory,
+    });
+    await dispatch(fetchCategories());
+    return true;
+  } catch (error) {
+    dispatch(setError(error.message));
+    return false;
   } finally {
     dispatch(setLoading(false));
   }

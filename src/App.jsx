@@ -10,6 +10,8 @@ import EditproductPage from "./pages/EditProductPage";
 import AddproductPage from "./pages/AddProductPage";
 import Navbar from "./components/Navbar";
 import AddCategoryPage from "./pages/AddCategoryPage";
+import ListCategory from "./pages/ListCategory";
+import EditCategoryPage from "./pages/EditCategoryPage";
 
 const router = createBrowserRouter([
   {
@@ -29,8 +31,16 @@ const router = createBrowserRouter([
         element: <EditproductPage />,
       },
       {
-        path: "add-category",
+        path: "category",
         element: <AddCategoryPage />,
+      },
+      {
+        path: "list-category",
+        element: <ListCategory />,
+      },
+      {
+        path: "edit-category/:id",
+        element: <EditCategoryPage />,
       },
     ],
   },

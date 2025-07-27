@@ -8,7 +8,6 @@ import {
   getDocs,
   updateDoc,
 } from "firebase/firestore";
-// import { useDispatch } from "react-redux";
 import { db } from "../../../configs/firebase";
 
 const initialState = {
