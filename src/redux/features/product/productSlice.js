@@ -93,6 +93,9 @@ export const addProduct = (product) => async (dispatch) => {
       description: product.description,
       category: product.category,
       stock: product.stock,
+      size: product.size,
+      color: product.color,
+      sku: product.sku,
     });
     dispatch(fetchProducts());
   } catch (error) {
@@ -128,6 +131,9 @@ export const editProductById = (product) => async (dispatch) => {
       description: product.description,
       category: product.category,
       stock: product.stock,
+      size: product.size,
+      color: product.color,
+      sku: product.sku,
     });
     dispatch(fetchProducts());
   } catch (error) {

@@ -3,6 +3,8 @@ import { auth } from "../configs/firebase";
 import { Link, useNavigate } from "react-router";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { HiTrash } from "react-icons/hi2";
+import { RiEdit2Fill } from "react-icons/ri";
 
 import {
   increment,
@@ -51,48 +53,40 @@ export default function HomePage() {
   return (
     <>
       <main className="p-6">
-        <div className="mb-6 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-neutral-800">Product List</h1>
+        <div className="mb-4 flex justify-between items-center">
+          <h1 className="text-xl font-bold text-neutral-800">Product List</h1>
         </div>
-        <div className="flex justify-between items-center mb-6">
-          <div className="w-fit p-1 bg-rose-100 rounded-lg flex justify-between items-center gap-2">
-            <div className="px-3 py-1.5 bg-white rounded-md flex justify-center items-center gap-1 cursor-pointer">
-              <div className="text-black text-base font-sm leading-tight">
-                All Products
-              </div>
+        <div className="flex justify-between items-center">
+          <div className="w-fit p-2 bg-rose-100 rounded-lg flex justify-between items-center gap-2">
+            <div className="px-3 py-2 bg-white rounded-md flex justify-center items-center gap-1 cursor-pointer">
+              <div className="text-black font-xs">All Products</div>
 
               <div className="text-red-600 text-sm font-bold">
                 ({products.length})
               </div>
             </div>
             <div className="px-3 py-1.5 flex justify-center items-center cursor-pointer">
-              <div className="text-neutral-600 text-base font-sm leading-tight">
-                Available
-              </div>
+              <div className="text-neutral-600 font-xs">Available</div>
             </div>
             <div className="px-3 py-1.5 flex justify-center items-center cursor-pointer">
-              <div className="text-neutral-600 text-base font-sm leading-tight">
-                Out of Stock
-              </div>
+              <div className="text-neutral-600 font-xs">Out of Stock</div>
             </div>
             <div className="px-3 py-1.5 flex justify-center items-center cursor-pointer">
-              <div className="text-neutral-600 text-base font-sm leading-tight">
-                Discontinued
-              </div>
+              <div className="text-neutral-600 font-xs">Discontinued</div>
             </div>
           </div>
           <div className="flex justify-end items-center gap-7">
             <div>
               <button
                 onClick={() => navigate("/add")}
-                className="bg-[#ff0000] text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+                className="bg-[#ff0000] text-white font-xs px-4 py-2 rounded-lg hover:bg-red-700 transition"
               >
                 + Add Product
               </button>
             </div>
           </div>
         </div>
-        <div className="overflow-x-auto bg-white rounded-lg shadow mt-6">
+        <div className="overflow-x-auto bg-white rounded-lg shadow mt-4">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
@@ -110,7 +104,7 @@ export default function HomePage() {
                   Price
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Description
+                  SKU
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Category
@@ -170,7 +164,7 @@ export default function HomePage() {
                         Rp{p.price}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 truncate max-w-xs">
-                        {p.description || "No description"}
+                        {p.sku || "No SKU"}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {p.category}
@@ -179,18 +173,20 @@ export default function HomePage() {
                         {p.stock}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <Link
-                          to={`/edit/${p.id}`}
-                          className="text-[#ff0000] hover:text-red-700 mr-2"
-                        >
-                          Edit
-                        </Link>
-                        <button
-                          onClick={() => deleteProduct(p.id)}
-                          className="text-red-600 hover:text-red-900"
-                        >
-                          Delete
-                        </button>
+                        <div className="flex justify-end items-center gap-2">
+                          <Link
+                            to={`/edit/${p.id}`}
+                            className="text-gray-700 hover:text-red-500"
+                          >
+                            <RiEdit2Fill size={18} />
+                          </Link>
+                          <button
+                            onClick={() => deleteProduct(p.id)}
+                            className="text-gray-700 hover:text-red-500"
+                          >
+                            <HiTrash size={18} />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))

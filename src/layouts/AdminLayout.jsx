@@ -16,7 +16,7 @@ export default function AdminLayout() {
   }, []);
 
   if (isLoadPage) {
-    return <div>LoadingAdminLayout...</div>;
+    return <div>Loading Admin Layout...</div>;
   }
   return (
     <>

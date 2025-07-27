@@ -9,6 +9,7 @@ import {
 } from "../redux/features/product/productSlice";
 import { FileUploaderRegular } from "@uploadcare/react-uploader";
 import "@uploadcare/react-uploader/core.css";
+import { BsCardImage } from "react-icons/bs";
 
 export default function EditproductPage() {
   const [name, setName] = useState("");
@@ -17,6 +18,9 @@ export default function EditproductPage() {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [stock, setStock] = useState(0);
+  const [size, setSize] = useState("");
+  const [color, setColor] = useState("");
+  const [sku, setSku] = useState("");
   const navigate = useNavigate();
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -34,6 +38,9 @@ export default function EditproductPage() {
           description,
           category,
           stock: Number(stock),
+          size,
+          color,
+          sku,
         })
       );
       console.log("Successfully edited product with id", id);
@@ -56,6 +63,9 @@ export default function EditproductPage() {
           description: docSnap.data().description,
           category: docSnap.data().category,
           stock: docSnap.data().stock,
+          size: docSnap.data().size,
+          color: docSnap.data().color,
+          sku: docSnap.data().sku,
         };
         setName(product.name);
         setImageUrl(product.imageUrl);
@@ -63,6 +73,9 @@ export default function EditproductPage() {
         setDescription(product.description);
         setCategory(product.category);
         setStock(product.stock);
+        setSize(product.size);
+        setColor(product.color);
+        setSku(product.sku);
       } catch (error) {
         console.log(error);
       }
@@ -82,84 +95,201 @@ export default function EditproductPage() {
       setDescription(product.description);
       setCategory(product.category);
       setStock(product.stock);
+      setSize(product.size);
+      setColor(product.color);
+      setSku(product.sku);
     }
   }, [product]);
 
   return (
     <>
-      <h1>Edit</h1>
-      <form onSubmit={editProduct} action="">
-        <div>
-          <label>Product Name</label>
-          <br />
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Image Url</label>
-          <br />
-          <input
-            type="text"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-            disabled={true}
-          />
-          <FileUploaderRegular
-            pubkey="33563ee22dfa473493de"
-            onFileUploadSuccess={(result) => {
-              console.log("Successfully upload file");
-              setImageUrl(result.cdnUrl);
-            }}
-          />
-        </div>
-        <div>
-          <label>Price</label>
-          <br />
-          <input
-            type="number"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Description</label>
-          <br />
-          <input
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Category</label>
-          <br />
-          <input
-            type="text"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Stock</label>
-          <br />
-          <input
-            type="number"
-            value={stock}
-            onChange={(e) => setStock(e.target.value)}
-          />
-        </div>
-        <button>Submit</button>
-      </form>
-      <button
-        onClick={() => {
-          console.log({ name, imageUrl, price, description, category, stock });
-        }}
-      >
-        Cek data dong
-      </button>
+      <main className="p-8 mt-2 max-w-7xl mx-auto">
+        <form
+          onSubmit={editProduct}
+          className="flex gap-6 justify-start items-start"
+        >
+          {/* LEFT: Product Form */}
+          <div className="w-[600px] p-6 bg-white rounded-3xl outline-red-200 flex flex-col gap-4 shadow-md">
+            <div>
+              <h2 className="text-zinc-800 text-xl font-semibold">
+                Edit Product
+              </h2>
+              <p className="text-gray-700 text-sm">
+                Update product details below.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-bold text-zinc-800">
+                Product Name
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter product name"
+                className="h-12 p-4 rounded-xl outline outline-red-300 text-sm"
+              />
+            </div>
+
+            <div className="flex gap-4">
+              <div className="flex-1 flex flex-col gap-1.5">
+                <label className="text-sm font-bold text-zinc-800">Size</label>
+                <input
+                  type="text"
+                  value={size}
+                  onChange={(e) => setSize(e.target.value)}
+                  placeholder="e.g, S, M, L, XL"
+                  className="h-12 p-4 rounded-xl outline outline-red-300 text-sm"
+                />
+              </div>
+              <div className="flex-1 flex flex-col gap-1.5">
+                <label className="text-sm font-bold text-zinc-800">Color</label>
+                <input
+                  type="text"
+                  value={color}
+                  onChange={(e) => setColor(e.target.value)}
+                  placeholder="Red White"
+                  className="h-12 p-4 rounded-xl outline outline-red-300 text-sm"
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <div className="flex-1 flex flex-col gap-1.5">
+                <label className="text-sm font-bold text-zinc-800">
+                  Category
+                </label>
+                <input
+                  type="text"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  placeholder="e.g., Shirts"
+                  className="h-12 p-4 rounded-xl outline outline-red-300 text-sm"
+                />
+              </div>
+              <div className="flex-1 flex flex-col gap-1.5">
+                <label className="text-sm font-bold text-zinc-800">
+                  Price (Rp)
+                </label>
+                <input
+                  type="number"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  placeholder="22000"
+                  className="h-12 p-4 rounded-xl outline outline-red-300 text-sm"
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <div className="flex-1 flex flex-col gap-1.5">
+                <label className="text-sm font-bold text-zinc-800">
+                  Quantity
+                </label>
+                <input
+                  type="number"
+                  value={stock}
+                  onChange={(e) => setStock(e.target.value)}
+                  placeholder="Enter stock quantity"
+                  className="h-12 p-4 rounded-xl outline outline-red-300 text-sm"
+                />
+              </div>
+              <div className="flex-1 flex flex-col gap-1.5">
+                <label className="text-sm font-bold text-zinc-800">SKU</label>
+                <input
+                  type="text"
+                  value={sku}
+                  onChange={(e) => setSku(e.target.value)}
+                  placeholder="Enter sku product"
+                  className="h-12 p-4 rounded-xl outline outline-red-300 text-sm"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-bold text-zinc-800">
+                Description
+              </label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Short product description"
+                className="max-w-md min-w-[550px] h-20 p-4 rounded-xl outline outline-red-300 text-sm placeholder:text-left placeholder:align-top resize-none"
+              />
+            </div>
+          </div>
+
+          {/* RIGHT: Image Upload */}
+          <div className="flex-1 p-6 bg-white rounded-3xl outline-red-200 flex flex-col gap-4 shadow-md">
+            <div className="flex flex-col gap-2">
+              <h2 className="text-zinc-800 text-xl font-semibold">
+                Product Image
+              </h2>
+              <p className="text-xs">
+                <span className="text-red-600 font-bold">Note:</span>
+                <span className="text-neutral-800">
+                  {" "}
+                  Format SVG, PNG, JPG (max 4MB)
+                </span>
+              </p>
+            </div>
+
+            <div className="flex-1 h-50 bg-neutral-50 rounded-lg border border-dashed border-red-300 flex items-center justify-center relative group cursor-pointer">
+              {imageUrl ? (
+                <img
+                  src={imageUrl}
+                  alt="Preview"
+                  className="object-contain max-h-full"
+                />
+              ) : (
+                <div className="flex flex-col py-3 items-center gap-1 text-red-300 text-sm italic">
+                  <BsCardImage size={24} />
+                  Upload Image
+                </div>
+              )}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-gray-500 bg-opacity-10 flex items-center justify-center transition duration-200">
+                <FileUploaderRegular
+                  pubkey="33563ee22dfa473493de"
+                  onFileUploadSuccess={(result) => {
+                    console.log("Successfully uploaded file");
+                    setImageUrl(result.cdnUrl);
+                  }}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block mb-1 text-red-600 font-medium">
+                Image URL
+              </label>
+              <input
+                type="text"
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+                disabled
+                className="w-full h-10 px-4 bg-red-100 rounded-lg border border-red-300 text-sm placeholder:text-red-400 placeholder:italic outline-none"
+              />
+            </div>
+
+            <div className="flex justify-end gap-4 mt-6">
+              <button
+                type="button"
+                className=" border border-red-500  mt-4 w-full hover:bg-red-700 hover:text-white text-red-500 font-semibold py-3 rounded-xl transition duration-200n"
+                onClick={() => navigate("/")}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="mt-4 w-full bg-[#ff0000] hover:bg-red-700 text-white font-semibold py-3 rounded-xl transition duration-200"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </form>
+      </main>
     </>
   );
 }
