@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { HiTrash } from "react-icons/hi2";
 import { RiEdit2Fill } from "react-icons/ri";
 import { FaBox } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 import {
   increment,
@@ -34,14 +35,33 @@ export default function HomePage() {
   };
 
   const deleteProduct = async (id) => {
-    const confirmDelete = confirm(
-      "Are you sure you want to delete this product?"
-    );
-    if (!confirmDelete) return;
-    try {
-      await dispatch(deleteWithRedux(id));
-    } catch (error) {
-      console.error("Failed to delete product:", error);
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await dispatch(deleteWithRedux(id));
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your product has been deleted.",
+          icon: "success",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+      } catch (error) {
+        Swal.fire({
+          title: "Error!",
+          text: "Failed to delete product.",
+          icon: "error",
+        });
+      }
     }
   };
 

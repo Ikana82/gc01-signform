@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { addProduct } from "../redux/features/product/productSlice.js";
 import UploadWidget from "../components/UploadWidget.jsx";
-import { BsCardImage } from "react-icons/bs";
+import { RiImageAddLine } from "react-icons/ri";
 import { PiUploadSimpleFill } from "react-icons/pi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -203,8 +203,8 @@ export default function AddproductPage() {
                   className="object-contain max-h-full"
                 />
               ) : (
-                <div className="flex flex-col py-3 items-center gap-1 text-red-300 text-sm italic">
-                  <BsCardImage size={24} />
+                <div className="flex flex-col py-5 items-center gap-1 text-red-300 text-sm italic">
+                  <RiImageAddLine size={24} />
                   Upload Image
                 </div>
               )}
@@ -214,7 +214,7 @@ export default function AddproductPage() {
             </div>
 
             <div>
-              <label className="block mb-1 text-red-600 font-medium">
+              <label className="block mb-1 text-zinc-800 font-medium">
                 Image URL
               </label>
               <input
