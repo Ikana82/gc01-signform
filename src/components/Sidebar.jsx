@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router";
 import { signOut } from "firebase/auth";
 import { auth } from "../configs/firebase";
-import LogoKanara from "../assets/logokanara.png";
+import LogoKanara from "../assets/logo-kanara.png";
 
 import {
   IoIosAddCircle,
@@ -88,13 +88,13 @@ export default function Sidebar() {
       {/* Logo and Title Section */}
       <div className="p-5 flex items-center gap-3">
         <img
-          className="w-8 h-10 object-contain"
+          className="w-40 h-14 object-contain"
           src={LogoKanara}
           alt="Kanara Logo"
         />
-        <span className="text-red-600 text-xl font-bold whitespace-nowrap">
+        {/* <span className="text-red-600 text-xl font-bold whitespace-nowrap font-hello">
           Kanara
-        </span>
+        </span> */}
       </div>
 
       {/* Main Navigation Section - Scrollable */}

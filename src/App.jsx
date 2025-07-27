@@ -6,8 +6,8 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import MainLayout from "./layouts/MainLayout";
 import HomePage from "./pages/HomePage";
-import AddproductPage from "./pages/AddproductPage";
 import EditproductPage from "./pages/EditProductPage";
+import AddproductPage from "./pages/AddProductPage";
 
 const router = createBrowserRouter([
   {
