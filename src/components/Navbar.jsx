@@ -1,9 +1,19 @@
 import React from "react";
+import { useEffect, useState } from "react";
 import { IoMdSearch, IoMdSettings } from "react-icons/io";
 import { IoIosNotifications } from "react-icons/io";
 import { BsEnvelopeFill } from "react-icons/bs";
 
 export default function Navbar() {
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
+
   return (
     <nav className="h-full bg-white flex items-center justify-between px-8 shadow-md py-3">
       {/* Search Input */}
@@ -40,7 +50,7 @@ export default function Navbar() {
             alt="User Profile"
           />
           <span className="text-neutral-800 text-base font-medium whitespace-nowrap hidden md:block">
-            Ika Nuraisma
+            {username || "Guest"}
           </span>
         </div>
       </div>

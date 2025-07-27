@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { addProduct } from "../redux/features/product/productSlice.js";
@@ -7,6 +7,9 @@ import { RiImageAddLine } from "react-icons/ri";
 import { PiUploadSimpleFill } from "react-icons/pi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { MdArrowDropDown } from "react-icons/md";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../configs/firebase";
 
 export default function AddproductPage() {
   const [name, setName] = useState("");
@@ -19,6 +22,7 @@ export default function AddproductPage() {
   const [size, setSize] = useState("");
   const [color, setColor] = useState("");
   const [isLoadingCreate, setIsLoadingCreate] = useState(false);
+  const [categories, setCategories] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -59,6 +63,24 @@ export default function AddproductPage() {
       setIsLoadingCreate(false);
     }
   }
+
+  useEffect(() => {
+    async function fetchCategory() {
+      try {
+        const querySnapshot = await getDocs(collection(db, "categories"));
+        const fetchedCategories = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setCategories(fetchedCategories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        toast.error("Failed to load categories");
+      }
+    }
+
+    fetchCategory();
+  }, []);
 
   return (
     <>
@@ -120,13 +142,23 @@ export default function AddproductPage() {
                 <label className="text-sm font-bold text-zinc-800">
                   Category
                 </label>
-                <input
-                  type="text"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  placeholder="e.g., Shirts"
-                  className="h-12 p-4 rounded-xl outline outline-red-300 text-sm"
-                />
+                <div className="relative w-full">
+                  <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="h-12 px-4 pr-10 w-full rounded-xl outline outline-red-300 text-sm bg-white appearance-none"
+                  >
+                    <option value="">-- Select Category --</option>
+                    {categories.map((cat) => (
+                      <option key={cat.id} value={cat.category}>
+                        {cat.category}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute inset-y-0 right-2 flex items-center pointer-events-none text-gray-500">
+                    <MdArrowDropDown size={24} />
+                  </div>
+                </div>
               </div>
               <div className="flex-1 flex flex-col gap-1.5">
                 <label className="text-sm font-bold text-zinc-800">
