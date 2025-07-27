@@ -1,20 +1,23 @@
 import React from "react";
-import { IoIosSearch, IoIosNotifications, IoMdSettings } from "react-icons/io";
-import { CgProfile } from "react-icons/cg";
+import { IoMdSearch, IoMdSettings } from "react-icons/io";
+import { IoIosNotifications } from "react-icons/io";
+import { BsEnvelopeFill } from "react-icons/bs";
 
 export default function Navbar() {
   return (
-    <nav className="h-full bg-white flex items-center justify-between px-8">
-      <div className="flex items-center flex-grow max-w-md">
-        {/* <IoIosSearch className="left-3 text-neutral-400 text-xl" /> */}
+    <nav className="h-full bg-white flex items-center justify-between px-8 shadow-md py-3">
+      {/* Search Input */}
+      <div className="flex items-center flex-grow max-w-md gap-2 bg-white border border-gray-300 rounded-lg px-3 py-2 focus-within:ring-1 focus-within:ring-red-500">
+        <IoMdSearch className="text-neutral-400 text-xl" />
         <input
           type="text"
           placeholder="Search anything..."
-          className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-red-500"
+          className="w-full outline-none"
         />
       </div>
 
-      <div className="flex items-center gap-4 ml-auto">
+      {/* Icon Section */}
+      <div className="flex items-center gap-3 ml-auto">
         <button
           className="p-2 rounded-full hover:bg-gray-100 transition-colors text-neutral-500"
           aria-label="Notifications"
@@ -26,9 +29,10 @@ export default function Navbar() {
           className="p-2 rounded-full hover:bg-gray-100 transition-colors text-neutral-500"
           aria-label="Settings"
         >
-          <IoMdSettings className="text-2xl" />
+          <BsEnvelopeFill className="text-2xl" />
         </button>
 
+        {/* User Info */}
         <div className="flex items-center gap-2 cursor-pointer">
           <img
             className="w-9 h-9 rounded-full object-cover"

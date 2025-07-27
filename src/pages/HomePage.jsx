@@ -78,29 +78,29 @@ export default function HomePage() {
           <h1 className="text-xl font-bold text-neutral-800">Product List</h1>
         </div>
         <div className="flex justify-between items-center">
-          <div className="w-fit p-2 bg-rose-100 rounded-lg flex justify-between items-center gap-2">
-            <div className="px-3 py-2 bg-white rounded-md flex justify-center items-center gap-1 cursor-pointer">
-              <div className="text-black font-xs">All Products</div>
+          <div className="w-fit p-1 bg-[#F8E7E7] rounded-lg flex justify-between items-center gap-2">
+            <div className="px-2 py-1.5 bg-white rounded-md flex justify-center items-center gap-1 cursor-pointer">
+              <div className="text-black text-sm">All Products</div>
 
               <div className="text-red-600 text-sm font-bold">
                 ({products.length})
               </div>
             </div>
             <div className="px-3 py-1.5 flex justify-center items-center cursor-pointer">
-              <div className="text-neutral-600 font-xs">Available</div>
+              <div className="text-neutral-600 text-sms">Available</div>
             </div>
             <div className="px-3 py-1.5 flex justify-center items-center cursor-pointer">
-              <div className="text-neutral-600 font-xs">Out of Stock</div>
+              <div className="text-neutral-600 text-sm">Out of Stock</div>
             </div>
             <div className="px-3 py-1.5 flex justify-center items-center cursor-pointer">
-              <div className="text-neutral-600 font-xs">Discontinued</div>
+              <div className="text-neutral-600 text-sm">Discontinued</div>
             </div>
           </div>
           <div className="flex justify-end items-center gap-7">
             <div>
               <button
                 onClick={() => navigate("/add")}
-                className="bg-[#ff0000] text-white font-xs px-4 py-2 rounded-lg hover:bg-red-700 transition"
+                className="bg-[#ff0000] text-white text-sm px-4 py-2 rounded-lg hover:bg-red-700 transition"
               >
                 + Add Product
               </button>
@@ -109,31 +109,31 @@ export default function HomePage() {
         </div>
         <div className="overflow-x-auto bg-white rounded-lg shadow mt-4">
           <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+            <thead className="bg-[#F8E7E7]">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                   No.
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                   Image
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                   Product
                 </th>
 
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                   Price
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                   SKU
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                   Category
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                   Stock
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-700 uppercase tracking-wider">
                   Action
                 </th>
               </tr>
@@ -216,12 +216,12 @@ export default function HomePage() {
                     <tr>
                       <td
                         colSpan="8"
-                        className="px-6 py-10 text-center text-sm text-gray-400"
+                        className="px-6 py-12 text-center text-sm text-gray-400"
                       >
                         <div className="flex flex-col items-center justify-center gap-2 text-neutral-300">
-                          <FaBox size={40} className="text-neutral-200" />
-                          <p className="text-base font-medium text-neutral-400">
-                            Tidak menemukan product
+                          <FaBox size={50} className="text-neutral-200" />
+                          <p className="text-base font-medium text-neutral-400 mt-2">
+                            No products have been added yet.
                           </p>
                         </div>
                       </td>

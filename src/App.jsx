@@ -8,6 +8,8 @@ import MainLayout from "./layouts/MainLayout";
 import HomePage from "./pages/HomePage";
 import EditproductPage from "./pages/EditProductPage";
 import AddproductPage from "./pages/AddProductPage";
+import Navbar from "./components/Navbar";
+import AddCategoryPage from "./pages/AddCategoryPage";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: "edit/:id",
         element: <EditproductPage />,
+      },
+      {
+        path: "add-category",
+        element: <AddCategoryPage />,
       },
     ],
   },
