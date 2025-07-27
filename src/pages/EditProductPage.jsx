@@ -10,6 +10,8 @@ import {
 import { FileUploaderRegular } from "@uploadcare/react-uploader";
 import "@uploadcare/react-uploader/core.css";
 import { BsCardImage } from "react-icons/bs";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function EditproductPage() {
   const [name, setName] = useState("");
@@ -24,10 +26,23 @@ export default function EditproductPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const dispatch = useDispatch();
+  const [isLoadingCreate, setIsLoadingCreate] = useState(false);
   const product = useSelector((state) => state.product.productById);
 
   async function editProduct(e) {
     e.preventDefault();
+    if (!name) return toast.error("Product name is required.");
+    if (!imageUrl) return toast.error("Product image is required.");
+    if (!price || price <= 0) return toast.error("Valid price is required.");
+    if (!description) return toast.error("Description is required.");
+    if (!category) return toast.error("Category is required.");
+    if (!stock || stock < 0) return toast.error("Valid stock is required.");
+    if (!sku) return toast.error("SKU is required.");
+    if (!size) return toast.error("Size is required.");
+    if (!color) return toast.error("Color is required.");
+
+    setIsLoadingCreate(true);
+
     try {
       await dispatch(
         editProductById({
@@ -43,10 +58,13 @@ export default function EditproductPage() {
           sku,
         })
       );
-      console.log("Successfully edited product with id", id);
-      navigate("/");
+      toast.success("Product updated successfully!", id);
+      setTimeout(() => navigate("/"), 3000);
     } catch (error) {
-      console.log("Failed to edit product:", error);
+      console.error("Failed to edit product:", error);
+      toast.error("Failed to update product.");
+    } finally {
+      setIsLoadingCreate(false);
     }
   }
 
@@ -103,6 +121,7 @@ export default function EditproductPage() {
 
   return (
     <>
+      <ToastContainer position="top-right" autoClose={2000} />
       <main className="p-8 mt-2 max-w-7xl mx-auto">
         <form
           onSubmit={editProduct}
@@ -282,9 +301,21 @@ export default function EditproductPage() {
               </button>
               <button
                 type="submit"
-                className="mt-4 w-full bg-[#ff0000] hover:bg-red-700 text-white font-semibold py-3 rounded-xl transition duration-200"
+                disabled={isLoadingCreate}
+                className={`mt-4 w-full text-white font-semibold py-3 rounded-xl transition duration-200 ${
+                  isLoadingCreate
+                    ? "bg-red-300 cursor-not-allowed"
+                    : "bg-[#ff0000] hover:bg-red-700"
+                }`}
               >
-                Submit
+                {isLoadingCreate ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <span className="loading loading-spinner text-white"></span>
+                    Updating Product...
+                  </div>
+                ) : (
+                  "Submit"
+                )}
               </button>
             </div>
           </div>

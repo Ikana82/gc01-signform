@@ -16,7 +16,11 @@ export default function AdminLayout() {
   }, []);
 
   if (isLoadPage) {
-    return <div>Loading Admin Layout...</div>;
+    return (
+      <div>
+        <span className="loading loading-spinner text-secondary"></span>
+      </div>
+    );
   }
   return (
     <>

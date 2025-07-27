@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { HiTrash } from "react-icons/hi2";
 import { RiEdit2Fill } from "react-icons/ri";
+import { FaBox } from "react-icons/fa";
 
 import {
   increment,
@@ -195,9 +196,14 @@ export default function HomePage() {
                     <tr>
                       <td
                         colSpan="8"
-                        className="px-6 py-4 text-center text-sm text-gray-500"
+                        className="px-6 py-10 text-center text-sm text-gray-400"
                       >
-                        No products found.
+                        <div className="flex flex-col items-center justify-center gap-2 text-neutral-300">
+                          <FaBox size={40} className="text-neutral-200" />
+                          <p className="text-base font-medium text-neutral-400">
+                            Tidak menemukan product
+                          </p>
+                        </div>
                       </td>
                     </tr>
                   )}
