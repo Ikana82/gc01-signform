@@ -90,7 +90,6 @@ export default function AddproductPage() {
           onSubmit={submitProduct}
           className="flex gap-6 justify-start items-start"
         >
-          {/* LEFT: Product Form */}
           <div className="w-[600px] p-6 bg-white rounded-3xl outline-red-200 flex flex-col gap-4 shadow-md">
             <div>
               <h2 className="text-zinc-8000 text-xl font-semibold">
@@ -212,7 +211,6 @@ export default function AddproductPage() {
             </div>
           </div>
 
-          {/* RIGHT: Image Upload */}
           <div className="flex-1 p-6 bg-white rounded-3xl outline-red-200 flex flex-col gap-4 shadow-md">
             <div className="flex flex-col gap-2">
               <h2 className="text-zinc-800 text-xl font-semibold">
