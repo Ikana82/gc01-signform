@@ -62,7 +62,6 @@ export default function ListCategory() {
         </h1>
 
         <div className="flex flex-wrap justify-between items-center gap-4">
-          {/* Search Bar */}
           <div className="flex w-full md:w-[500px] items-center px-4 py-2 rounded-xl border border-neutral-300 bg-white shadow-sm">
             <input
               type="text"
@@ -73,7 +72,6 @@ export default function ListCategory() {
             <FaSearch className="text-neutral-500 text-sm" />
           </div>
 
-          {/* Add Category Button */}
           <button
             onClick={() => navigate("/category")}
             className="text-sm text-white bg-red-600 hover:bg-red-700 transition px-4 py-2 rounded-lg"

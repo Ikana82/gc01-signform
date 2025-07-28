@@ -16,7 +16,6 @@ export default function Navbar() {
 
   return (
     <nav className="h-full bg-white flex items-center justify-between px-8 shadow-md py-3">
-      {/* Search Input */}
       <div className="flex items-center flex-grow max-w-md gap-2 bg-white border border-gray-300 rounded-lg px-3 py-2 focus-within:ring-1 focus-within:ring-red-500">
         <IoMdSearch className="text-neutral-400 text-xl" />
         <input
@@ -26,7 +25,6 @@ export default function Navbar() {
         />
       </div>
 
-      {/* Icon Section */}
       <div className="flex items-center gap-3 ml-auto">
         <button
           className="p-2 rounded-full hover:bg-gray-100 transition-colors text-neutral-500"
@@ -42,7 +40,6 @@ export default function Navbar() {
           <BsEnvelopeFill className="text-2xl" />
         </button>
 
-        {/* User Info */}
         <div className="flex items-center gap-2 cursor-pointer">
           <img
             className="w-9 h-9 rounded-full object-cover"

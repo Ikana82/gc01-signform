@@ -62,7 +62,6 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-white flex flex-col md:flex-row overflow-hidden px-6 py-6">
       <Toaster position="top-right" reverseOrder={false} />
-      {/* Left Side (Image atau Banner) */}
       <div className="w-full md:w-1/2 flex justify-center items-center">
         <img
           src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -71,7 +70,6 @@ export default function LoginPage() {
         />
       </div>
 
-      {/* Right Side (Form login and register) */}
       <div className="w-full md:w-1/2 md:px-16 py-6 flex flex-col justify-center items-center gap-6">
         <div className="w-full flex flex-col gap-4 text-center">
           <div className="text-2xl md:text-4xl font-semibold text-gray-900">

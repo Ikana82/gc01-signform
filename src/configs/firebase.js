@@ -15,7 +15,7 @@ const firebaseConfig = {
   storageBucket: "fern-gc02-ika.firebasestorage.app",
   messagingSenderId: "622282494743",
   appId: "1:622282494743:web:e2bb3d19e8070a3ba31d52",
-  measurementId: "G-N40QSD083F"
+  measurementId: "G-N40QSD083F",
 };
 
 // Initialize Firebase

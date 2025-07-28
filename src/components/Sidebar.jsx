@@ -85,19 +85,14 @@ export default function Sidebar() {
 
   return (
     <div className="h-full w-56 bg-white border-r border-gray-100 flex flex-col">
-      {/* Logo and Title Section */}
       <div className="p-5 flex items-center gap-3">
         <img
           className="w-40 h-14 object-contain"
           src={LogoKanara}
           alt="Kanara Logo"
         />
-        {/* <span className="text-red-600 text-xl font-bold whitespace-nowrap font-hello">
-          Kanara
-        </span> */}
       </div>
 
-      {/* Main Navigation Section - Scrollable */}
       <div className="flex-1 overflow-y-auto px-3">
         {menuSections.map((section, sectionIndex) => (
           <div key={sectionIndex} className="mb-4 last:mb-0">
@@ -108,7 +103,6 @@ export default function Sidebar() {
             )}
             <nav className="flex flex-col gap-1">
               {" "}
-              {/* Added gap for spacing between items */}
               {section.items.map((item) => {
                 const IconComponent = item.icon;
                 const active = isActive(item.path);
@@ -150,7 +144,6 @@ export default function Sidebar() {
         ))}
       </div>
 
-      {/* Profile and Logout Section */}
       <div className="pb-5 pt-3 px-4 border-t border-gray-200">
         <button
           onClick={handleLogout}
