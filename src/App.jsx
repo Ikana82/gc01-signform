@@ -1,6 +1,11 @@
 import "./App.css";
-import { createBrowserRouter, RouterProvider } from "react-router";
-import AuthContextProvider from "./contexts/AuthContext";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  useLocation,
+  useNavigate,
+} from "react-router";
+import AuthContextProvider, { AuthContext } from "./contexts/AuthContext";
 import AdminLayout from "./layouts/AdminLayout";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -12,15 +17,51 @@ import Navbar from "./components/Navbar";
 import AddCategoryPage from "./pages/AddCategoryPage";
 import ListCategory from "./pages/ListCategory";
 import EditCategoryPage from "./pages/EditCategoryPage";
+import PublicLayout from "./layouts/PublicLayout";
+import HomePagePublic from "./pages/public/HomePublicPage";
+import ContactPage from "./pages/ContactPage";
+import { useContext, useEffect } from "react";
+import HomePublicPage from "./pages/public/HomePublicPage";
+import AboutPublicPage from "./pages/public/AboutPublicPage";
+
+function AdminProtactedPage({ children }) {
+  const { role } = useContext(AuthContext);
+  const location = useLocation();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (role !== "admin") {
+      navigate("/public", {
+        state: location,
+        replace: true,
+      });
+    }
+    if (role === "admin") {
+      navigate("/", {
+        state: location,
+        replace: true,
+      });
+    }
+  }, []);
+
+  return children;
+}
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />,
+    element: (
+      <AdminProtactedPage>
+        <MainLayout />
+      </AdminProtactedPage>
+    ),
     children: [
       {
         index: true,
         element: <HomePage />,
+      },
+      {
+        path: "contact",
+        element: <ContactPage />,
       },
       {
         path: "add",
@@ -41,6 +82,20 @@ const router = createBrowserRouter([
       {
         path: "edit-category/:id",
         element: <EditCategoryPage />,
+      },
+    ],
+  },
+  {
+    path: "/public",
+    element: <PublicLayout />,
+    children: [
+      {
+        index: true,
+        element: <HomePublicPage />,
+      },
+      {
+        path: "about",
+        element: <AboutPublicPage />,
       },
     ],
   },

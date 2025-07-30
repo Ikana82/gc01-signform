@@ -5,11 +5,11 @@ import { AuthContext } from "../contexts/AuthContext";
 import Sidebar from "../components/Sidebar";
 
 export default function MainLayout() {
-  const { user } = useContext(AuthContext);
+  const { user, role, username } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("pengecekan user di MainLayout");
+    console.log(role, username, "pengecekan user di MainLayout");
     if (!user) {
       navigate("/auth/login", { replace: true });
     }

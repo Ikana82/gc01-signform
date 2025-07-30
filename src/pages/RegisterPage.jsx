@@ -60,6 +60,7 @@ export default function RegisterPage() {
         username,
         email,
         phone,
+        role: "customer",
         createdAt: serverTimestamp(),
       });
       await signOut(auth);
